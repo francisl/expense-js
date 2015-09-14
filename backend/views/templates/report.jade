@@ -1,0 +1,64 @@
+html
+    head
+        title Expense
+        link(rel="stylesheet" type="text/css" href="/style/semantic/dist/semantic.min.css")
+        script(src="/style/semantic/dist/semantic.min.js")
+
+    body(style="padding: 20px")
+        div(class="ui grid")
+            div(class="four wide column")
+                div(class="ui vertical menu")
+                    div(class="item")
+                        form(action="/report/", type="GET", class="ui form", style="margin: 10px;")
+                            div(class="field")
+                                each year in years
+                                    div(class="field")
+                                        div(class="ui radio checkbox")
+                                            if year == currentYear
+                                                input(type="radio", name="year", value=year, id='form_year_#{year}', checked)
+                                            else
+                                                input(type="radio", name="year", value=year, id='form_year_#{year}')
+                                            label(for='form_year_#{year}')= year
+                            br
+                            div(class="field")
+                                each month in months
+                                    div(class="field")
+                                        div(class="ui radio checkbox")
+                                            if month.checked
+                                                input(type="radio", name="month", value=month.id, id='form_month_#{month.id}', checked)
+                                            else
+                                                input(type="radio", name="month", value=month.id, id='form_month_#{month.id}')
+                                            label(for='form_month_#{month.id}')= month.month
+                            br
+                            div(class="inline fields")
+                                each spender, index in spenders
+                                    div(class="field")
+                                        div(class="ui radio checkbox")
+                                            if index == 0
+                                                input(type="radio", name="spender", value=spender.id, class="ui toggle button" id='form_spender_#{spender.id}', checked)
+                                            else
+                                                input(type="radio", name="spender", value=spender.id, class="ui toggle button" id='form_spender_#{spender.id}')
+                                            label(for='form_spender_#{spender.id}') #{spender.name}
+                            br
+                            button(class="ui button", type="submit") Submit
+            
+            div(class="twelve wide column")
+                h1 Total #{total} $
+                h2 Spender total #{sum} $
+                    
+                table(class="ui striped table")
+                    thead
+                        tr
+                            th Category
+                            th Store
+                            th Total
+                            th sum
+                            th Date
+                    tbody
+                        each val in expenses
+                            tr
+                                td= val.category
+                                td= val.store
+                                td= val.amount
+                                td= val.sum
+                                td= val.exp_date
