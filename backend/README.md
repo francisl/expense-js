@@ -5,4 +5,4 @@ install dependencies :
 
 run server :
 
-    nodemon --exec npm run babel-node -- index.js
+    npm start

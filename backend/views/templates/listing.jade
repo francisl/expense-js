@@ -1,0 +1,29 @@
+html
+    head
+        title Expense
+        link(rel="stylesheet" type="text/css" href="/vendor/style/semantic/dist/semantic.min.css")
+        script(src="/vendor/style/semantic/dist/semantic.min.js")
+
+    body(style="padding: 20px")
+        div(class="ui grid")
+            div(class="twelve wide column")
+                form(action="/#{listingType}/" method="post")
+                    table(class="ui striped table")
+                        thead
+                            tr
+                                th Select
+                                th Category (#{total})
+                                th Use by 
+                                
+                        tbody
+                            each elem in elements
+                                tr
+                                    td
+                                        input(type="checkbox" name="selected" value='#{elem.id}')
+                                    td
+                                        a(href="/#{listingType}/#{elem.id}")= elem.name
+                                    td= elem.used
+                                    
+                    br
+                    input(type="submit" value="Merge Selected")
+                    br

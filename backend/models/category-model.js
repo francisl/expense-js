@@ -10,7 +10,12 @@ var Category = {
                 resolve(data);
             };
             console.log('promise category');
-            db.all('SELECT c.id, c.name, count(e.id) used FROM category c INNER JOIN expense e ON e.category_id = c.id GROUP BY upper(name)', onFetch);
+            db.all(`SELECT c.id, c.name, count(e.id) used
+                       FROM category c
+                       INNER JOIN expense e
+                       ON e.category_id = c.id
+                       GROUP BY upper(name)`,
+                       onFetch);
         });
     },
     count: function() {
@@ -22,6 +27,24 @@ var Category = {
             };
             console.log('promise store');
             db.get('SELECT count(*) total FROM category;', onFetch);
+        });
+    },
+    where: function(idList){
+        return new Promise(function(resolve, reject){
+            var onFetch = function (err, data) {
+                if (err) throw new Error(err);
+                console.log('resolved store');
+                resolve(data);
+            };
+            console.log('promise store');
+            db.all(`SELECT c.id, c.name, count(e.id) used
+                       FROM category c
+                       INNER JOIN expense e
+                       ON e.category_id = c.id
+                       GROUP BY upper(name)
+                       WHERE c.id in '${idList}'
+                       ORDER BY used`,
+                       onFetch);
         });
     }
 };

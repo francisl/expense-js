@@ -11,10 +11,28 @@ router.get('/', function(req, res) {
 
     ps.then(function(data){
         console.log('count : ', data[1]);
-        res.render('templates/category/categories',
+        res.render('templates/listing',
             {
-                categories: data[0],
+                elements: data[0],
+                listingType: 'categories',
                 total: data[1].total
+            }
+        );
+    });
+});
+
+router.post('/', function(req, res) {
+    console.log('param : ', req.body);
+    var ps = Promise.all([
+        Category.where([12, 13])
+    ]);
+
+    ps.then(function(data){
+        res.render('templates/listing/listing',
+            {
+                master: data[0],
+                elements: data[0],
+                listingType: 'categories',
             }
         );
     });

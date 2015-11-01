@@ -1,3 +1,5 @@
+"use strict";
+
 var express = require('express');
 var ExpenseSQL = require('./models/expense');
 var Spender = require('./models/spender');
@@ -126,10 +128,13 @@ app.get('/report', function (req, res) {
 
 app.use('/stores', stores);
 app.use('/categories', categories);
-app.use("/style", express.static('style'));
+var styleDir = __dirname + '/vendor/style';
+app.use('/style', express.static(styleDir));
 
 var server = app.listen(3000, function () {
     var host = server.address().address;
     var port = server.address().port;
+
     console.log('Example app listening at http://%s:%s', host, port);
+    console.log('Static dir : ', styleDir);
 });

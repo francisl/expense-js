@@ -51,14 +51,15 @@ html
                         tr
                             th Category
                             th Store
+                            th spender's share
                             th Total
-                            th sum
+                            
                             th Date
                     tbody
                         each val in expenses
                             tr
                                 td= val.category
                                 td= val.store
-                                td= val.amount
                                 td= val.sum
+                                td= val.amount
                                 td= val.exp_date

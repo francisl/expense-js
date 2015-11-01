@@ -11,9 +11,10 @@ router.get('/', function(req, res) {
 
     ps.then(function(data){
         console.log('count : ', data[1]);
-        res.render('templates/store/stores',
+        res.render('templates/listing',
             {
-                stores: data[0],
+                elements: data[0],
+                listingType: "stores",
                 total: data[1].total
             }
         );
