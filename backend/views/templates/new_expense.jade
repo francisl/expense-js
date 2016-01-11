@@ -1,0 +1,18 @@
+html
+    head
+        title Add Expense
+        link(rel="stylesheet" type="text/css" href="/style/semantic/dist/semantic.min.css")
+        script(src="/style/semantic/dist/semantic.min.js")
+
+    body(style="padding: 20px")
+        div(class="ui grid")
+            div(class="twelve wide column")
+                form(action="/#{listingType}/" method="post")
+                    input(type="text" name="Category") 
+                    input(type="text" name="Store")
+                    input(type="date" name="date")
+                    each spender in spenders
+                        label=spender.name
+                            input(type="checkbox" name="spenders" value="#{spender.id}")
+                    input(type="submit" value="Add")
+                    br

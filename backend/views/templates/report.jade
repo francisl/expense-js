@@ -34,7 +34,7 @@ html
                                 each spender, index in spenders
                                     div(class="field")
                                         div(class="ui radio checkbox")
-                                            if index == 0
+                                            if spender.id == selectedSpender
                                                 input(type="radio", name="spender", value=spender.id, class="ui toggle button" id='form_spender_#{spender.id}', checked)
                                             else
                                                 input(type="radio", name="spender", value=spender.id, class="ui toggle button" id='form_spender_#{spender.id}')
@@ -52,14 +52,13 @@ html
                             th Category
                             th Store
                             th spender's share
-                            th Total
-                            
-                            th Date
+                            //- th Total
+                            //- th Date
                     tbody
                         each val in expenses
                             tr
                                 td= val.category
                                 td= val.store
                                 td= val.sum
-                                td= val.amount
-                                td= val.exp_date
+                                //- td= val.amount
+                                //- td= val.exp_date

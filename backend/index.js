@@ -7,6 +7,7 @@ var Category = require('./models/category-model');
 var Store = require('./models/store-model');
 var stores = require('./views/stores');
 var categories = require('./views/categories');
+var newExpense = require('./views/new_expense');
 var _ = require('lodash');
 
 var app = express();
@@ -47,18 +48,15 @@ class ExpenseRenderer {
         var [year, month] = data.selectedYearMonth || LastMonthDate.getYearMonth();
 
         console.log('total : ', data.sum);
-        return {
-            expenses: data.expenses ,
-            spenders: data.spenders,
-            total: data.sum.total,
-            sum: data.sum.sum,
-            years: data.years,
-            currentYear: year,
-            months: _.each(MONTHS, (x) => {
-                x.checked = parseInt(x.id) === parseInt(month) ? true : false;
-                return x;
-            })
-        };
+
+        data.months = _.each(MONTHS, (x) => {
+            x.checked = parseInt(x.id) === parseInt(month) ? true : false;
+            return x;
+        });
+        data.currentYear = year;
+        data.total = data.sum.total;
+        data.sum = data.sum.sum;
+        return data;
     }
 }
 
@@ -113,6 +111,8 @@ app.get('/report', function (req, res) {
     }
 
     ps.then(function(data){
+        console.log('spenders .3.. : ', data[1]);
+        console.log('requested spenders : ', req.query.spender);
         res.render('templates/report',
                          ExpenseRenderer.renderData(
                              {
@@ -120,7 +120,8 @@ app.get('/report', function (req, res) {
                                 spenders: data[1],
                                 sum: data[2],
                                 years: data[3],
-                                selectedYearMonth: selectedYearMonth
+                                selectedYearMonth: selectedYearMonth,
+                                selectedSpender: req.query.spender
                             })
         );
     });
@@ -128,10 +129,12 @@ app.get('/report', function (req, res) {
 
 app.use('/stores', stores);
 app.use('/categories', categories);
+app.use('/expense', newExpense);
+
 var styleDir = __dirname + '/vendor/style';
 app.use('/style', express.static(styleDir));
 
-var server = app.listen(3000, function () {
+var server = app.listen(5000, function () {
     var host = server.address().address;
     var port = server.address().port;
 
