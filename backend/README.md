@@ -6,3 +6,4 @@ install dependencies :
 run server :
 
     npm start
+    npm dev

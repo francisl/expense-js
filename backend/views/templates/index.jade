@@ -7,6 +7,15 @@ html
         
 
     body(style="padding: 20px")
+        form(action="/api/invoice/" method="post")
+            input(type="text" name="Category") 
+            input(type="text" name="Store")
+            input(type="date" name="date")
+            each spender in spenders
+                label=spender.name
+                    input(type="checkbox" name="spenders" value="#{spender.id}")
+            input(type="submit" value="Add")
+            br
         div(class="ui grid")
             div(class="four wide column")
                 div(class="ui vertical menu")
