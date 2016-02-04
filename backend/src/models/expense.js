@@ -1,5 +1,5 @@
-var db = require('../db').sqlite;
-var _ = require('lodash');
+import db from '../db';
+import ModelUtils from './model-utils';
 
 var DateRange = function(year, month) {
     var startDate = `${year}-${month}-01`;
@@ -10,91 +10,65 @@ var DateRange = function(year, month) {
     };
 };
 
-var ExpenseSQL = {
-    all: function() {
-        return new Promise(function(resolve, reject){
-            console.log('promise expense');
-            var onFetch = function (err, data) {
-                if (err) throw new Error(err);
-                console.log('resolved all');
-                resolve(data);
-            };
-            db.all(`
-                SELECT e.*,
-                            store.name store,
-                            c.name category,
-                            GROUP_CONCAT(s.name) spenders,
-                            count(e.id) sum
-                FROM exp2spender_assoc ass
-                INNER JOIN expense e ON e.id = ass.exp_id
-                INNER JOIN spender s ON s.id = ass.spender_id
-                INNER JOIN category c ON c.id = e.category_id
-                INNER JOIN store ON store.id = e.store_id
-                GROUP BY e.id
-                ORDER BY e.exp_date`,
-                onFetch);
-        });
-    },
+class ExpenseSQL {
+    static all() {
+        var sql = `
+            SELECT e.*,
+                        store.name store,
+                        c.name category,
+                        GROUP_CONCAT(s.name) spenders,
+                        count(e.id) sum
+            FROM exp2spender_assoc ass
+            INNER JOIN expense e ON e.id = ass.exp_id
+            INNER JOIN spender s ON s.id = ass.spender_id
+            INNER JOIN category c ON c.id = e.category_id
+            INNER JOIN store ON store.id = e.store_id
+            GROUP BY e.id
+            ORDER BY e.exp_date`;
+        return ModelUtils.execSql(sql, 'all');
+    }
 
-    byDate: function(year, month, spenderId){
-        return new Promise(function(resolve, reject){
-            console.log(`promise expense by month : ${year} - ${month}`);
-            var onFetch = function (err, data) {
-                if (err) throw new Error(err);
-                console.log('resolved byDate');
-                resolve(data);
-            };
+    static byDate(year, month, spenderId){
+        var rdate = DateRange(year, month);
+        var sql =`
+            SELECT e.exp_date,
+                        ROUND(e.amount, 2) amount,
+                        store.name store,
+                        c.name category,
+                        ROUND(e.amount / (select count(*) from exp2spender_assoc ass WHERE ass.exp_id = e.id), 2) sum
+            FROM expense e
+            LEFT JOIN exp2spender_assoc ass ON ass.exp_id = e.id
+            LEFT JOIN spender s ON ass.spender_id = s.id
+            INNER JOIN category c ON c.id = e.category_id
+            INNER JOIN store ON store.id = e.store_id
+            WHERE e.exp_date BETWEEN '${rdate.start}' AND '${rdate.end}'
+            AND s.id = ${spenderId}
+            GROUP BY e.id
+            ORDER BY c.name, store.name, e.exp_date`;
+        return ModelUtils.execSql(sql, 'all');
+    }
+
+    static sum(year, month, spenderId) {
+        var sql;
+        typeof year !== 'undefined' ? console.log('true') : console.log('false');
+        if (typeof year !== 'undefined' && typeof month !== 'undefined') {
             var rdate = DateRange(year, month);
-            console.log('got rdate : ', rdate);
-            console.log('spenderid');
-            db.all(`
-                SELECT e.exp_date,
-                            ROUND(e.amount, 2) amount,
-                            store.name store,
-                            c.name category,
-                            ROUND(e.amount / (select count(*) from exp2spender_assoc ass WHERE ass.exp_id = e.id), 2) sum
-                FROM expense e
-                LEFT JOIN exp2spender_assoc ass ON ass.exp_id = e.id
-                LEFT JOIN spender s ON ass.spender_id = s.id
-                INNER JOIN category c ON c.id = e.category_id
-                INNER JOIN store ON store.id = e.store_id
-                WHERE e.exp_date BETWEEN '${rdate.start}' AND '${rdate.end}'
-                AND s.id = ${spenderId}
-                GROUP BY e.id
-                ORDER BY c.name, store.name, e.exp_date`,
-                onFetch);
-            });
-    },
+            sql = `
+                SELECT ROUND(SUM(amount / (select count(*) from exp2spender_assoc ass WHERE ass.exp_id = eid) ), 2) sum,
+                            ROUND(SUM (amount), 2) total
+                FROM (SELECT e.amount amount, e.id eid
+                            FROM expense e
+                            LEFT JOIN exp2spender_assoc ass ON ass.exp_id = e.id
+                            LEFT JOIN spender s ON ass.spender_id = s.id
+                            WHERE e.exp_date BETWEEN '${rdate.start}' AND '${rdate.end}'
+                            AND s.id = ${spenderId});`;
+        } else {
+            sql = 'SELECT ROUND(SUM(amount), 2) sum, ROUND(SUM(amount), 2) total  FROM expense;';
+        }
+        return ModelUtils.execSql(sql, 'get');
+    }
 
-    sum: function(year, month, spenderId) {
-        return new Promise(function(resolve, reject){
-            var onFetch = function (err, data) {
-                if (err) throw new Error(err);
-                console.log('resolved sum');
-                resolve(data);
-            };
-            console.log('promise sum');
-            typeof year !== 'undefined' ? console.log('true') : console.log('false');
-            if (typeof year !== 'undefined' && typeof month !== 'undefined') {
-                var rdate = DateRange(year, month);
-                db.get(`
-                    SELECT ROUND(SUM(amount / (select count(*) from exp2spender_assoc ass WHERE ass.exp_id = eid) ), 2) sum,
-                                ROUND(SUM (amount), 2) total
-                    FROM (SELECT e.amount amount, e.id eid
-                                FROM expense e
-                                LEFT JOIN exp2spender_assoc ass ON ass.exp_id = e.id
-                                LEFT JOIN spender s ON ass.spender_id = s.id
-                                WHERE e.exp_date BETWEEN '${rdate.start}' AND '${rdate.end}'
-                                AND s.id = ${spenderId});
-                `, onFetch);
-            } else {
-                db.get('SELECT ROUND(SUM(amount), 2) sum, ROUND(SUM(amount), 2) total  FROM expense;', onFetch);
-            }
-
-        });
-    },
-
-    years: function(){
+    static years(){
         return new Promise(function(resolve, reject){
             var onFetch = function (err, data) {
                 if (err) throw new Error(err);
@@ -107,9 +81,9 @@ var ExpenseSQL = {
             };
 
             console.log('promise years');
-            db.all('SELECT exp_date FROM expense GROUP BY exp_date;', onFetch);
+            db.sqlite.all('SELECT exp_date FROM expense GROUP BY exp_date;', onFetch);
         });
     }
-};
+}
 
 module.exports = ExpenseSQL;

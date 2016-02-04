@@ -1,53 +1,30 @@
-var db = require('../db').sqlite;
-var _ = require('lodash');
+import db from '../db';
+import ModelUtils from './model-utils';
 
-var Category = {
-    all: function() {
-        return new Promise(function(resolve, reject){
-            var onFetch = function (err, data) {
-                if (err) throw new Error(err);
-                console.log('resolved category');
-                resolve(data);
-            };
-            console.log('promise category');
-            db.all(`SELECT c.id, c.name, count(e.id) used
-                       FROM category c
-                       INNER JOIN expense e
-                       ON e.category_id = c.id
-                       GROUP BY upper(name)`,
-                       onFetch);
-        });
-    },
-    count: function() {
-        return new Promise(function(resolve, reject){
-            var onFetch = function (err, data) {
-                if (err) throw new Error(err);
-                console.log('resolved store');
-                resolve(data);
-            };
-            console.log('promise store');
-            db.get('SELECT count(*) total FROM category;', onFetch);
-        });
-    },
-    where: function(idList){
-        return new Promise(function(resolve, reject){
-            var onFetch = function (err, data) {
-                if (err) throw new Error(err);
-                console.log('resolved store');
-                resolve(data);
-            };
-            console.log('promise store');
-            db.all(`SELECT c.id, c.name, count(e.id) used
-                       FROM category c
-                       INNER JOIN expense e
-                       ON e.category_id = c.id
-                       GROUP BY upper(name)
-                       WHERE c.id in '${idList}'
-                       ORDER BY used`,
-                       onFetch);
-        });
+console.log('base model : ', ModelUtils);
+
+class Category {
+    static all() {
+        return ModelUtils.execSql(`SELECT c.id, c.name, count(e.id) used
+                   FROM category c
+                   INNER JOIN expense e
+                   ON e.category_id = c.id
+                   GROUP BY upper(name)`, 'all');
     }
-};
 
+    static count() {
+        return ModelUtils.count('category');
+    }
+
+    static where(idList){
+        return ModelUtils.execSql(`SELECT c.id, c.name, count(e.id) used
+                   FROM category c
+                   INNER JOIN expense e
+                   ON e.category_id = c.id
+                   GROUP BY upper(name)
+                   WHERE c.id in '${idList}'
+                   ORDER BY used`, 'all');
+    }
+}
 
 module.exports = Category;

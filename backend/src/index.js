@@ -132,7 +132,10 @@ app.get('/report', function (req, res) {
 app.use('/stores', stores);
 app.use('/categories', categories);
 app.use('/expense', newExpense);
-require('./api')(app);
+require('./api/categories')(app);
+require('./api/invoices')(app);
+require('./api/spenders')(app);
+require('./api/stores')(app);
 
 var styleDir = __dirname + '/../vendor/style';
 app.use('/style', express.static(styleDir));
