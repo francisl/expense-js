@@ -8,6 +8,10 @@ class Store {
     static count() {
         return ModelUtils.count('store');
     }
+    
+    static getOrCreate(value){
+        return ModelUtils.getOrCreate('store', value);
+    }
 }
 
 

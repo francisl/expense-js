@@ -13,5 +13,8 @@ var FILENAME = 'expenses.sqlite';
 var DEVFILENAME = 'expenses-dev.sqlite';
 
 module.exports = {
-    sqlite: new sqlite3.Database(path.join(DIRNAME, DEVFILENAME))
+    sqlite: new sqlite3.Database(path.join(DIRNAME, DEVFILENAME), sqlite3.OPEN_READWRITE),
+    newDb: function(){
+        return new sqlite3.Database(path.join(DIRNAME, DEVFILENAME), sqlite3.OPEN_READWRITE);
+    }
 };

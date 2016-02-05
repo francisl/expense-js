@@ -25,6 +25,10 @@ class Category {
                    WHERE c.id in '${idList}'
                    ORDER BY used`, 'all');
     }
+    
+    static getOrCreate(value){
+        return ModelUtils.getOrCreate('category', value);
+    }
 }
 
 module.exports = Category;

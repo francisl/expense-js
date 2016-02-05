@@ -1,5 +1,9 @@
 import db from '../db';
 import ModelUtils from './model-utils';
+import Category from '../models/category-model';
+import Spender from '../models/spender';
+import Store from '../models/store-model';
+
 
 var DateRange = function(year, month) {
     var startDate = `${year}-${month}-01`;
@@ -14,10 +18,10 @@ class ExpenseSQL {
     static all() {
         var sql = `
             SELECT e.*,
-                        store.name store,
-                        c.name category,
-                        GROUP_CONCAT(s.name) spenders,
-                        count(e.id) sum
+                   store.name store,
+                   c.name category,
+                   GROUP_CONCAT(s.name) spenders,
+                   count(e.id) sum
             FROM exp2spender_assoc ass
             INNER JOIN expense e ON e.id = ass.exp_id
             INNER JOIN spender s ON s.id = ass.spender_id
@@ -83,6 +87,40 @@ class ExpenseSQL {
             console.log('promise years');
             db.sqlite.all('SELECT exp_date FROM expense GROUP BY exp_date;', onFetch);
         });
+    }
+    
+    static create(category, store, date, amount, spenders){
+        if (category === undefined || store === undefined || date === undefined || amount === undefined || spenders.length <= 0){
+            return false;
+        }
+        
+        const ps = Promise.all([
+            Category.getOrCreate(category),
+            Store.getOrCreate(store)
+        ]);
+
+        ps.then(function(data){
+            db.sqlite.serialize(function() {
+                
+                console.log('data : ', data);
+                var newExpSql = `
+                    INSERT INTO expense (category_id, store_id, exp_date, amount) 
+                    values (${data[0].id}, ${data[1].id}, ${date}, ${amount});
+                `;
+                console.log('new exp sql : ', newExpSql);
+                db.sqlite.run(newExpSql);
+                
+                db.sqlite.get('select last_insert_rowid();', function(err, data){ 
+                    var expId = data['last_insert_rowid()'];
+                    spenders.map((s) => {
+                        db.sqlite.get(`select id from spender where id = ${s}`, (err, data) => {
+                            var sql = `INSERT INTO exp2spender_assoc (exp_id, spender_id) VALUES (${expId}, ${data.id})`;
+                            db.sqlite.run(sql);    
+                        });      
+                    });
+                });
+            });
+        });        
     }
 }
 
