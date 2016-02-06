@@ -105,7 +105,7 @@ class ExpenseSQL {
                 console.log('data : ', data);
                 var newExpSql = `
                     INSERT INTO expense (category_id, store_id, exp_date, amount) 
-                    values (${data[0].id}, ${data[1].id}, ${date}, ${amount});
+                    values (${data[0]}, ${data[1]}, '${date}', ${amount});
                 `;
                 console.log('new exp sql : ', newExpSql);
                 db.sqlite.run(newExpSql);
