@@ -2,9 +2,8 @@ import db from '../db';
 
 function execSql(sql, mode='get'){
     return new Promise(function(resolve, reject){
-        const onFetch = function (err, data) {
-            // if (err) throw new Error(err);
-            if(err){
+        const onResults = function (err, data) {
+            if(err) {
                 reject(data);
             }
             resolve(data);
@@ -12,16 +11,16 @@ function execSql(sql, mode='get'){
         console.log('execSql : ', sql, ' : ', mode );
         switch(mode){
             case 'get':
-                db.sqlite.get(sql, onFetch);
+                db.sqlite.get(sql, onResults);
                 break;
             case 'all':
-                db.sqlite.all(sql, onFetch);
+                db.sqlite.all(sql, onResults);
                 break;
             case 'run':
-                db.sqlite.run(sql, onFetch);
+                db.sqlite.run(sql, onResults);
                 break;
             default:
-                db.sqlite.get(sql, onFetch);
+                db.sqlite.get(sql, onResults);
         }
     });
 }
@@ -35,9 +34,8 @@ exports.count = count;
 function get(tablename, name, column='id'){
     return new Promise(function(resolve, reject){
         var onFetch = function (err, data) {
-            if (err) throw new Error(err);
-            const value = data ? data[column] : undefined;
-            resolve(value);
+            if (err) reject(err);
+            resolve(data ? data[column] : undefined);
         };
         var sql = `SELECT ${column}
                    FROM ${tablename}
@@ -47,7 +45,7 @@ function get(tablename, name, column='id'){
 }
 
 function create(tablename, name) {
-    console.log('create ', tablename, ' : ', name);
+    // console.log('create ', tablename, ' : ', name);
     return execSql(`INSERT INTO ${tablename} (name) VALUES ('${name}')`, 'run');
 };
 exports.create = create;

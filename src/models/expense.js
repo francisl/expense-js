@@ -88,39 +88,76 @@ class ExpenseSQL {
             db.sqlite.all('SELECT exp_date FROM expense GROUP BY exp_date;', onFetch);
         });
     }
-    
+
+    static insertSpenders (categoryId, storeId, date, amount, spenders){
+        return new Promise((resolve, reject) => {
+            ExpenseSQL.getExistingExpense(categoryId, storeId, date, amount)
+            .then((expense) => {
+                spenders.map((s) => {
+                    db.sqlite.get(`select id from spender where id = ${s}`, (err, data) => {
+                        db.sqlite.run(`INSERT INTO exp2spender_assoc (exp_id, spender_id) VALUES (${expense.id}, ${data.id})`);
+                    });
+                });
+                resolve(expense.id)
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+
+    static getExistingExpense(categoryId, storeId, date, amount){
+        var getSql = `
+            SELECT id
+            FROM expense
+            WHERE category_id = '${categoryId}'
+            AND store_id = '${storeId}'
+            AND amount = '${amount}'
+            AND exp_date = '${date}';
+        `;
+        return ModelUtils.execSql(getSql, 'get');
+    }
+
+    static insertExpense(categoryId, storeId, date, amount, spenders){
+        return new Promise((resolve, reject) => {
+            ExpenseSQL.getExistingExpense(categoryId, storeId, date, amount)
+            .then((data) => {
+                if (data === undefined){
+                    var newExpSql = 'INSERT INTO expense (category_id, store_id, exp_date, amount) values (?, ?, ?, ?);';
+                    db.sqlite.run(newExpSql, [categoryId, storeId, date, amount], (err) => {
+                        ExpenseSQL.insertSpenders(categoryId, storeId, date, amount, spenders)
+                        .then((expenseId) => { resolve(expenseId) })
+                        .catch((err) => { reject(err)});
+                    });
+                } else {
+                    reject("Already Exist : ", data);
+                }
+            });
+        });
+    }
+
     static create(category, store, date, amount, spenders){
         if (category === undefined || store === undefined || date === undefined || amount === undefined || spenders.length <= 0){
             return false;
         }
-        
-        const ps = Promise.all([
-            Category.getOrCreate(category),
-            Store.getOrCreate(store)
-        ]);
-
-        ps.then(function(data){
-            db.sqlite.serialize(function() {
-                
-                console.log('data : ', data);
-                var newExpSql = `
-                    INSERT INTO expense (category_id, store_id, exp_date, amount) 
-                    values (${data[0]}, ${data[1]}, '${date}', ${amount});
-                `;
-                console.log('new exp sql : ', newExpSql);
-                db.sqlite.run(newExpSql);
-                
-                db.sqlite.get('select last_insert_rowid();', function(err, data){ 
-                    var expId = data['last_insert_rowid()'];
-                    spenders.map((s) => {
-                        db.sqlite.get(`select id from spender where id = ${s}`, (err, data) => {
-                            var sql = `INSERT INTO exp2spender_assoc (exp_id, spender_id) VALUES (${expId}, ${data.id})`;
-                            db.sqlite.run(sql);    
-                        });      
-                    });
-                });
+        return new Promise((resolve, reject) => {
+            Promise.all([
+                Category.getOrCreate(category),
+                Store.getOrCreate(store)
+            ]).then((data) => {
+                ExpenseSQL.insertExpense(
+                    data[0],
+                    data[1],
+                    date,
+                    amount,
+                    spenders
+                ).then((expenseId) => {
+                    resolve(expenseId);
+                }).catch((err) => {
+                    console.log('error with insertExpense ', err);
+                    reject(err);
+                })
             });
-        });        
+        });
     }
 }
 
