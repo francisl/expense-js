@@ -135,7 +135,7 @@ class ExpenseSQL {
         });
     }
 
-    static create(category, store, date, amount, spenders){
+    static create(category, store, date, amount, spenders=[]){
         if (category === undefined || store === undefined || date === undefined || amount === undefined || spenders.length <= 0){
             return false;
         }

@@ -54,20 +54,27 @@ function getOrCreate(tablename, name){
     return new Promise((resolve, reject) => {
         get(tablename, name)
         .then((data) => {
+            console.log('1 then');
             if (data === undefined) {
+                console.log('no data for ', name);
                 return create(tablename, name);
             }
             return new Promise((resolve, reject) => {
+                console.log('find data for ', name);
                 resolve(data);
             });
         }).then((data) => {
+            console.log('2 then');
             if(data) {
+                console.log('has data from create or get : ', data);
                 resolve(data);
             } else {
+                console.log('failed to get or create but no error, relaunch');
                 resolve(getOrCreate(tablename, name));
             }
         }).catch((err) => {
             // recursive, hope that get will one day return something
+            console.log('catch error, relaunch ', err);
             resolve(getOrCreate(tablename, name));
         });
     });
