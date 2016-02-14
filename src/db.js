@@ -22,8 +22,8 @@ function createSchemaSql() {
     return `
     BEGIN TRANSACTION;
     CREATE TABLE "store" (
-    	`id`	INTEGER NOT NULL,
-    	`name`	VARCHAR NOT NULL UNIQUE,
+    	id	INTEGER NOT NULL,
+    	name	VARCHAR NOT NULL UNIQUE,
     	PRIMARY KEY(id,name)
     );
     CREATE TABLE spender (
@@ -53,7 +53,6 @@ function createSchemaSql() {
     	PRIMARY KEY (id)
     );
     COMMIT;
-
     `
 }
 module.exports = {
