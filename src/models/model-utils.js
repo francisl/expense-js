@@ -1,23 +1,30 @@
 import db from '../db';
 
-function execSql(sql, mode='get'){
-    return new Promise(function(resolve, reject){
-        const onResults = function (err, data) {
+function execSql(sql, mode='get') {
+    return new Promise(function(resolve, reject) {
+        const onResults = function(err, data) {
+            console.log('------------------------------');
             if(err) {
-                reject(data);
+                console.log('execSql failed : ', err, ' : ', sql);
+                reject(err);
             }
+            console.log('execSql succeed : ', data, ' : ', sql);
             resolve(data);
         };
-        console.log('execSql : ', sql, ' : ', mode );
+
         switch(mode){
             case 'get':
                 db.sqlite.get(sql, onResults);
                 break;
             case 'all':
-                db.sqlite.all(sql, onResults);
+                db.sqlite.all(sql, [], onResults);
                 break;
             case 'run':
-                db.sqlite.run(sql, onResults);
+                db.sqlite.run(sql, [], onResults);
+                break;
+            case 'exec':
+                console.log('exec : ', sql);
+                db.sqlite.exec(sql, onResults);
                 break;
             default:
                 db.sqlite.get(sql, onResults);
@@ -54,7 +61,7 @@ function getOrCreate(tablename, name){
     return new Promise((resolve, reject) => {
         get(tablename, name)
         .then((data) => {
-            console.log('1 then');
+            console.log('then after get tablename');
             if (data === undefined) {
                 console.log('no data for ', name);
                 return create(tablename, name);
@@ -64,7 +71,6 @@ function getOrCreate(tablename, name){
                 resolve(data);
             });
         }).then((data) => {
-            console.log('2 then');
             if(data) {
                 console.log('has data from create or get : ', data);
                 resolve(data);

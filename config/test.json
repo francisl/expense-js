@@ -1,5 +1,5 @@
 {
 "db": {
-      "filename": ":memory:"
+      "filename": "expense-dev.sqlite"
    }
 }

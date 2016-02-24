@@ -93,10 +93,8 @@ class ExpenseSQL {
         return new Promise((resolve, reject) => {
             ExpenseSQL.getExistingExpense(categoryId, storeId, date, amount)
             .then((expense) => {
-                spenders.map((s) => {
-                    db.sqlite.get(`select id from spender where id = ${s}`, (err, data) => {
-                        db.sqlite.run(`INSERT INTO exp2spender_assoc (exp_id, spender_id) VALUES (${expense.id}, ${data.id})`);
-                    });
+                spenders.map((spender) => {
+                    db.sqlite.run(`INSERT INTO exp2spender_assoc (exp_id, spender_id) VALUES (${expense.id}, ${spender})`);
                 });
                 resolve(expense.id)
             }).catch((err) => {
@@ -121,6 +119,7 @@ class ExpenseSQL {
         return new Promise((resolve, reject) => {
             ExpenseSQL.getExistingExpense(categoryId, storeId, date, amount)
             .then((data) => {
+                console.log('insertExpense then : ', data);
                 if (data === undefined){
                     var newExpSql = 'INSERT INTO expense (category_id, store_id, exp_date, amount) values (?, ?, ?, ?);';
                     db.sqlite.run(newExpSql, [categoryId, storeId, date, amount], (err) => {
@@ -136,7 +135,11 @@ class ExpenseSQL {
     }
 
     static create(category, store, date, amount, spenders=[]){
-        if (category === undefined || store === undefined || date === undefined || amount === undefined || spenders.length <= 0){
+        if (category === undefined ||
+            store === undefined ||
+            date === undefined ||
+            amount === undefined ||
+            spenders.length <= 0){
             return false;
         }
         return new Promise((resolve, reject) => {
