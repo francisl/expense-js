@@ -3,12 +3,9 @@ import db from '../db';
 function execSql(sql, mode='get') {
     return new Promise(function(resolve, reject) {
         const onResults = function(err, data) {
-            console.log('------------------------------');
             if(err) {
-                console.log('execSql failed : ', err, ' : ', sql);
                 reject(err);
             }
-            console.log('execSql succeed : ', data, ' : ', sql);
             resolve(data);
         };
 
@@ -23,7 +20,6 @@ function execSql(sql, mode='get') {
                 db.sqlite.run(sql, [], onResults);
                 break;
             case 'exec':
-                console.log('exec : ', sql);
                 db.sqlite.exec(sql, onResults);
                 break;
             default:
@@ -61,26 +57,20 @@ function getOrCreate(tablename, name){
     return new Promise((resolve, reject) => {
         get(tablename, name)
         .then((data) => {
-            console.log('then after get tablename');
             if (data === undefined) {
-                console.log('no data for ', name);
                 return create(tablename, name);
             }
             return new Promise((resolve, reject) => {
-                console.log('find data for ', name);
                 resolve(data);
             });
         }).then((data) => {
             if(data) {
-                console.log('has data from create or get : ', data);
                 resolve(data);
             } else {
-                console.log('failed to get or create but no error, relaunch');
                 resolve(getOrCreate(tablename, name));
             }
         }).catch((err) => {
             // recursive, hope that get will one day return something
-            console.log('catch error, relaunch ', err);
             resolve(getOrCreate(tablename, name));
         });
     });

@@ -4,9 +4,20 @@ import {expect, assert} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 import db from '../../db';
-modelUtils.execSql(db.createSchemaSql(), 'run');
 import modelUtils from '../model-utils';
 import expense from '../expense';
+
+function dropTable() {
+    return Promise.all(db.dropSchemaSql().map((query)=>{
+        return modelUtils.execSql(query, 'exec');
+    }));
+}
+
+function createTable() {
+    return Promise.all(db.createSchemaSql().map((query) => {
+        return modelUtils.execSql(query, 'exec');
+    }));
+}
 
 
 chai.use(chaiAsPromised);

@@ -76,7 +76,6 @@ class ExpenseSQL {
         return new Promise(function(resolve, reject){
             var onFetch = function (err, data) {
                 if (err) throw new Error(err);
-                console.log('resolved years');
                 var loggedYears = {}
                 _.each(data, (year) => {
                     loggedYears[year.exp_date.split('-')[0]] = null;
@@ -119,7 +118,6 @@ class ExpenseSQL {
         return new Promise((resolve, reject) => {
             ExpenseSQL.getExistingExpense(categoryId, storeId, date, amount)
             .then((data) => {
-                console.log('insertExpense then : ', data);
                 if (data === undefined){
                     var newExpSql = 'INSERT INTO expense (category_id, store_id, exp_date, amount) values (?, ?, ?, ?);';
                     db.sqlite.run(newExpSql, [categoryId, storeId, date, amount], (err) => {

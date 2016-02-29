@@ -10,4 +10,4 @@ const configData = JSON.parse(configJson);
 
 module.exports = function config(){
     return configData;
-}
+};

@@ -41,12 +41,12 @@ function createSchemaSql() {
     console.log('Creating new schema... ');
     return [
         `CREATE TABLE store (
-        	id	INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT,
-        	name	VARCHAR NOT NULL UNIQUE
+        	id INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT,
+        	name VARCHAR NOT NULL UNIQUE
         );`,
         `CREATE TABLE spender (
         	id INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT,
-        	name VARCHAR
+        	name VARCHAR NOT NULL UNIQUE
         );`,
         `CREATE TABLE category (
             id INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT,
@@ -68,6 +68,7 @@ function createSchemaSql() {
         	FOREIGN KEY(spender_id) REFERENCES spender (id)
         )`];
 }
+
 module.exports = {
     sqlite: createDB(),
     createDB,
