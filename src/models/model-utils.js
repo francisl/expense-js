@@ -4,6 +4,7 @@ function execSql(sql, mode='get') {
     return new Promise(function(resolve, reject) {
         const onResults = function(err, data) {
             if(err) {
+                console.log('reject ::: ', err);
                 reject(err);
             }
             resolve(data);
