@@ -1,4 +1,5 @@
 import db from '../db';
+import _ from 'lodash';
 import ModelUtils from './model-utils';
 import Category from '../models/category-model';
 import Spender from '../models/spender';

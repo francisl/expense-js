@@ -45,12 +45,13 @@ function assertSqlEqual(sql, equal, name) {
     }).then(thenSuccess(name)).catch(catchError(name));
 }
 
-Promise((resolve, reject) => {
+new Promise((resolve, reject) => {
     dropTable().then(() => {
         console.log('=====>>> creating Schema');
         createTable().then(() => {
             console.log('=====>>> Schema completed');
         }).then(() => {
+            console.log('=====>>> Create Spenders completed -> resolved');
             createTestSpenders().then(() => resolve());
         });
     });
@@ -58,18 +59,20 @@ Promise((resolve, reject) => {
 .then(function(){
     console.log('=====>>> Start creating expenses');
     Promise.all([
-        m.create('Epicerie', 'Provigo', '2018-01-01', 444.44, [1]),
-        m.create('Epicerie', 'Provigo', '2018-01-02', 555.55, [1, 2]),
-        m.create('Epicerie', 'IGA', '2018-02-02', 666.66, [1]),
-        m.create('Kira', 'Global', '2018-04-04', 888.88, [1, 2]),
-        m.create('Maison', 'Canadian Tire', '2018-04-04', 999.88, [1, 2, 3]),
-        m.create('Auto', 'Canadian Tire', '2018-04-04', 4000.88, [1]),
-        m.create('Auto', 'Canadian Tire', '2018-04-04', 6000.88, [1])])
+        m.create('Epicerie', 'Provigo', '2018-01-01', '444.44', [1]),
+        m.create('Epicerie', 'Provigo', '2018-01-02', '555.55', [1, 2]),
+        m.create('Epicerie', 'IGA', '2018-02-02', '666.66', [1]),
+        m.create('Kira', 'Global', '2018-04-04', '888.88', [1, 2]),
+        m.create('Maison', 'Canadian Tire', '2018-04-04', '999.88', [1, 2, 3]),
+        m.create('Auto', 'Canadian Tire', '2018-04-04', '4000.88', [1]),
+        m.create('Auto', 'Canadian Tire', '2018-04-04', '6000.88', [1]),
+        m.create('Vetement', 'Levi\'s', '2016-02-28', '97.71', [1])
+    ])
     .then(function(){
-        assertSqlEqual('select count(*) from expense;', 7, 'Expense');
-        assertSqlEqual('select count(*) from category;', 4, 'Category');
-        assertSqlEqual('select count(*) from store;', 4, 'Store');
+        assertSqlEqual('select count(*) from expense;', 8, 'Expense');
+        assertSqlEqual('select count(*) from category;', 5, 'Category');
+        assertSqlEqual('select count(*) from store;', 5, 'Store');
         assertSqlEqual('select count(*) from spender;', 3, 'Spender');
-        assertSqlEqual('select count(*) from exp2spender_assoc;', 11, 'exp2spender_assoc');
+        assertSqlEqual('select count(*) from exp2spender_assoc;', 12, 'exp2spender_assoc');
     });
 });

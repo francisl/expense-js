@@ -42,14 +42,17 @@ function get(tablename, name, column='id'){
         };
         var sql = `SELECT ${column}
                    FROM ${tablename}
-                   WHERE name = '${name}'`
+                   WHERE name = "${name}"`;
+        console.log('get sql : ', sql);
         db.sqlite.get(sql, onFetch);
     });
 }
 
 function create(tablename, name) {
     // console.log('create ', tablename, ' : ', name);
-    return execSql(`INSERT INTO ${tablename} (name) VALUES ('${name}')`, 'run');
+    var sql = `INSERT INTO ${tablename} (name) VALUES ("${name}")`;
+    console.log('create sql : ', sql);
+    return execSql(sql, 'run');
 };
 exports.create = create;
 

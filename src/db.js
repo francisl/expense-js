@@ -50,7 +50,7 @@ function createSchemaSql() {
         );`,
         `CREATE TABLE category (
             id INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT,
-            name VARCHAR
+            name VARCHAR UNIQUE
         );`,
         `CREATE TABLE expense (
         	id INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT,
