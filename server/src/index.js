@@ -5,7 +5,6 @@ var Category = require('./models/category-model');
 var Store = require('./models/store-model');
 var stores = require('./views/stores');
 var categories = require('./views/categories');
-var newExpense = require('./views/new_expense');
 var _ = require('lodash');
 var bodyParser = require('body-parser')
 
@@ -61,36 +60,7 @@ class ExpenseRenderer {
     }
 }
 
-app.get('/', function (req, res) {
-    var ps = null,
-         [year, month] = LastMonthDate.getYearMonth();
-
-    ps = Promise.all([
-        Spender.all(),
-        Category.all(),
-        Store.all()
-    ]);
-
-    ps.then(function(data){
-        res.render('templates/index',
-                        {
-                            currentYear: year,
-                            years: [year-1, year],
-                            months: _.each(MONTHS, (x) => {
-                                x.checked = parseInt(x.id) === parseInt(month) ? true : false;
-                                return x;
-                            }),
-                            spenders: data[0],
-                            categories: data[1],
-                            stores: data[2]
-
-                        }
-        );
-    });
-});
-
-
-app.get('/report', function (req, res) {
+function report(req, res) {
     var ps = null,
          selectedYearMonth =  [];
 
@@ -112,33 +82,36 @@ app.get('/report', function (req, res) {
     }
 
     ps.then(function(data){
-        console.log('spenders .3.. : ', data[1]);
-        console.log('requested spenders : ', req.query.spender);
         res.render('templates/report',
-                         ExpenseRenderer.renderData(
-                             {
-                                expenses: data[0],
-                                spenders: data[1],
-                                sum: data[2],
-                                years: data[3],
-                                selectedYearMonth: selectedYearMonth,
-                                selectedSpender: req.query.spender
-                            })
+                    ExpenseRenderer.renderData(
+                    {   expenses: data[0],
+                        spenders: data[1],
+                        sum: data[2],
+                        years: data[3],
+                        selectedYearMonth: selectedYearMonth,
+                        selectedSpender: req.query.spender
+                    })
         );
     });
-});
+}
 
+var appDir = __dirname + '/../../app/dist';
+app.get('/', express.static(appDir));
+app.use('/app', express.static(appDir));
 
+app.get('/report', report);
 app.use('/stores', stores);
 app.use('/categories', categories);
-app.use('/expense', newExpense);
+
+var styleDir = __dirname + '/../vendor';
+app.use('/style', express.static(styleDir));
+
+
 require('./api/categories')(app);
 require('./api/invoices')(app);
 require('./api/spenders')(app);
 require('./api/stores')(app);
 
-var styleDir = __dirname + '/../vendor/style';
-app.use('/style', express.static(styleDir));
 
 var server = app.listen(5000, function () {
     var host = server.address().address;
@@ -146,4 +119,5 @@ var server = app.listen(5000, function () {
 
     console.log('Example app listening at http://%s:%s', host, port);
     console.log('Static dir : ', styleDir);
+	console.log('App dir : ', appDir);
 });

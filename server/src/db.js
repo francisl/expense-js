@@ -1,29 +1,25 @@
 var sqlite3 = require('sqlite3');
-var os = require('os');
-var path = require('path');
-var fs = require('fs');
 var config = require('./config');
+var fs = require('fs');
 
-var configFilename = config()['db']['filename'];
-
-var USERSFILES = os.type() === 'Windows_NT' ? 'AppData/Roaming' : 'Library';
-var DIRNAME = path.join(os.homedir(), USERSFILES, 'R-Expenses');
-if (!fs.existsSync(DIRNAME)){
-    fs.mkdir(DIRNAME);
+function initPathIfNotCreated(dir) {
+	console.log('INIT: Check if db dir exist: ', dir);
+	if (!fs.existsSync(dir)){
+		console.log('INIT: Create DB dir : ', dir);
+	    fs.mkdirSync(dir);
+	}
 }
 
 var currentDB;
-function createDB(database) {
-    console.log('CURRENT DB : ', currentDB);
+function initDB(database) {
     if (currentDB) {
-        console.log('Reuse database :: ', currentDB);
+        console.info('Reuse database :: ', currentDB);
         return currentDB;
     }
-    console.log('database param : ', database);
-    configFilename = database || configFilename;
-    console.log('Create database :: ', path.join(DIRNAME, configFilename));
-    const FILENAME = configFilename === ':memory:' ? ':memory:' : path.join(DIRNAME, configFilename);
-    currentDB = new sqlite3.Database(FILENAME);
+	console.log('DB config filepath : ', config.getDBFilePath());
+	initPathIfNotCreated(config.getDirName());
+    currentDB = new sqlite3.Database(config.getDBFilePath());
+	console.log('current db : ', currentDB);
     return currentDB;
 }
 
@@ -70,8 +66,8 @@ function createSchemaSql() {
 }
 
 module.exports = {
-    sqlite: createDB(),
-    createDB,
+    sqlite: initDB(),
+    initDB,
     createSchemaSql,
     dropSchemaSql
 };

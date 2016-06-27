@@ -1,5 +1,5 @@
 {
-  "base": "/vendor/style/semantic/",
+  "base": "node_modules/semantic-ui/dist",
   "paths": {
     "source": {
       "config": "src/theme.config",

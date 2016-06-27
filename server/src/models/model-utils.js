@@ -1,4 +1,4 @@
-import db from '../db';
+var db = require('../db');
 
 function execSql(sql, mode='get') {
     return new Promise(function(resolve, reject) {
@@ -9,6 +9,8 @@ function execSql(sql, mode='get') {
             }
             resolve(data);
         };
+
+		console.log('sqlite : ', db);
 
         switch(mode){
             case 'get':
@@ -32,7 +34,7 @@ exports.execSql = execSql;
 
 function count(tablename) {
     return execSql(`SELECT count(*) total FROM ${tablename};`);
-};
+}
 exports.count = count;
 
 function get(tablename, name, column='id'){
