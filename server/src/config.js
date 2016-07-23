@@ -30,7 +30,8 @@ class Config {
 
 	getDBFilePath() {
 		console.log('get db filename ::: ', this.getDbFilename());
-		return this.getDbFilename()  === ':memory:' ? ':memory:' : path.join(this.dirname, this.getDbFilename());
+		var homeDir = this.getDbFilename().replace('~', os.homedir());
+		return this.getDbFilename()  === ':memory:' ? ':memory:' : path.join(homeDir);
 	}
 }
 
