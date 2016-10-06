@@ -10,7 +10,7 @@ function execSql(sql, mode='get') {
             resolve(data);
         };
 
-		console.log('sqlite : ', db);
+        //console.log('sqlite : ', db);
 
         switch(mode){
             case 'get':

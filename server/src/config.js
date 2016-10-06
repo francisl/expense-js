@@ -13,6 +13,7 @@ class Config {
 
 	getConfig() {
 		const NODE_ENV = process.env.NODE_ENV || 'default';
+		console.log('node env : ', NODE_ENV);
 		const FILE = path.join(process.env.PWD, 'config', NODE_ENV + '.json');
 		const CONFIG_JSON = fs.readFileSync(FILE);
 		return JSON.parse(CONFIG_JSON);
