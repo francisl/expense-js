@@ -98,7 +98,7 @@ class InvoiceForm extends Component {
     setAmount(e){
         var reg = /\d*\.\d\d/;
         var amount = e.target.value.replace(/[a-zA-Z]/, '');
-        if (/^\d+\.\d\d$/.test(amount) || /^\d+\.$/.test(amount) || /^\d+\.\d$/.test(amount) || /^\d+$/.test(amount) ){
+        if (amount.length === 0 || /^\d+\.\d\d$/.test(amount) || /^\d+\.$/.test(amount) || /^\d+\.\d$/.test(amount) || /^\d+$/.test(amount) ){
             this.setState({ form: { ...this.state.form, amount }});
         }
     }
