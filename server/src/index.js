@@ -1,3 +1,4 @@
+let path = require('path');
 var express = require('express');
 var ExpenseSQL = require('./models/expense');
 var Spender = require('./models/spender');
@@ -95,7 +96,7 @@ function report(req, res) {
     });
 }
 
-var appDir = __dirname + '/../../app/dist';
+var appDir = path.join(__dirname, '..', '..', 'app', 'dist');
 app.get('/', express.static(appDir));
 app.use('/app', express.static(appDir));
 
@@ -103,7 +104,7 @@ app.get('/report', report);
 app.use('/stores', stores);
 app.use('/categories', categories);
 
-var styleDir = __dirname + '/../vendor';
+var styleDir = path.join(__dirname, '..', 'vendor');
 app.use('/style', express.static(styleDir));
 
 
@@ -113,11 +114,12 @@ require('./api/spenders')(app);
 require('./api/stores')(app);
 
 
-var server = app.listen(5000, function () {
+var server = app.listen(5050, '0.0.0.0', function () {
+    console.log('address : ', server.address().address);
     var host = server.address().address;
     var port = server.address().port;
 
-    console.log('Example app listening at http://%s:%s', host, port);
+    console.log(`App listening at http://${host}:${port}`);
     console.log('Static dir : ', styleDir);
 	console.log('App dir : ', appDir);
 });

@@ -3,6 +3,11 @@ var fs = require('fs');
 var os = require('os');
 var process = require('process');
 
+const CONFIG_PATH = function() {
+	const OS_HOME_DATA = os.type() === 'Windows_NT'? '\AppData\\Local' : 'Documents';
+	return path.join(os.homedir(), OS_HOME_DATA);
+}();
+
 
 class Config {
 	constructor() {
@@ -13,26 +18,25 @@ class Config {
 
 	getConfig() {
 		const NODE_ENV = process.env.NODE_ENV || 'default';
-		console.log('node env : ', NODE_ENV);
-		const FILE = path.join(process.env.PWD, 'config', NODE_ENV + '.json');
+		const FILE = path.join(process.cwd(), 'config', NODE_ENV.trim(' ') + '.json');
+		console.log('node env : ', FILE);
 		const CONFIG_JSON = fs.readFileSync(FILE);
 		return JSON.parse(CONFIG_JSON);
 	}
 
 	getDirName() {
-		const USERSFILES = os.type() === 'Windows_NT' ? 'AppData/Roaming' : 'Library';
-		return path.join(os.homedir(), USERSFILES, 'R-Expenses');
+		console.log('USERSFILES ', CONFIG_PATH);
+		return path.join(CONFIG_PATH, 'R-Expenses');
 	}
 
-	getDbFilename() {
-		console.log('config data : ', this.configData);
-		return this.configData.db.filename;
+	getDbFile() {
+		return path.join(this.dirname, this.configData.db.filename);
 	}
 
 	getDBFilePath() {
-		console.log('get db filename ::: ', this.getDbFilename());
-		var homeDir = this.getDbFilename().replace('~', os.homedir());
-		return this.getDbFilename()  === ':memory:' ? ':memory:' : path.join(homeDir);
+		const DB_FILE = this.getDbFile();
+		console.log('get db filename ::: ', DB_FILE);
+		return this.configData.db.filename === ':memory:' ? ':memory:' : this.getDbFile();
 	}
 }
 
