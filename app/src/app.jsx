@@ -1,11 +1,11 @@
-// import $ from 'jquery';
+import $ from 'jquery';
 // import '../styles/foundation/app.scss';
-import '../styles/main.scss';
+// import '../styles/main.scss';
 import 'file?name=[name].[ext]!../index.html';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider, connect } from 'react-redux';
-import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
+// import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import store from './stores/store';
 import InvoiceDashboard from './components/dashboard/dashboard.jsx';
 
@@ -30,9 +30,6 @@ const devTemplate = <div style={devStyle}>
     <Provider store={store}>
         <MainApp />
     </Provider>
-    <DebugPanel left top bottom>
-        <DevTools store={store} monitor={LogMonitor} />
-    </DebugPanel>
 </div>;
 
 ReactDOM.render(

@@ -13,7 +13,7 @@ export function categoriesReducers (state, action) {
             console.log('action categories :::>>> ', action.categories);
             return action.categories;
         default:
-            return state;
+            return [];
     }
 }
 
@@ -25,7 +25,7 @@ export function storesReducers (state, action) {
         case RECEIVE_STORES:
             return action.stores;
         default:
-            return state;
+            return [];
     }
 }
 
@@ -37,6 +37,6 @@ export function spendersReducers (state, action) {
         case RECEIVE_SPENDERS:
             return action.spenders.spenders;
         default:
-            return state;
+            return [];
     }
 }

@@ -114,7 +114,9 @@ class InvoiceForm extends Component {
     }
 
     render() {
-        console.log('props : ', this.props.form.request);
+        console.log('request : ', this.props.form.request);
+        console.log('props : ', this.props);
+
         this.resetFormWhenNeeded();
         return (
             <div>

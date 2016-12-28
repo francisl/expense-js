@@ -1,9 +1,10 @@
 import $ from 'jquery';
 
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
+export const PENDING_CATEGORIES = 'PENDING_CATEGORIES';
 function receiveCategories(categories) {
     if (categories === undefined){
-        return;
+        return {type: PENDING_CATEGORIES, categories: []};;
     }
     return {
         type: RECEIVE_CATEGORIES,
@@ -11,15 +12,13 @@ function receiveCategories(categories) {
     };
 }
 export function fetchCategories(dispatch) {
-    $.ajax({
-      method: "GET",
-      url: "/api/category/",
-  }).success(function(result){
-        dispatch(receiveCategories(result.categories));
-    }).error((r, e) => {
+    $.ajax({ method: "GET", url: "/api/category/",})
+    .success(function(result){
+        dispatch(receiveCategories(result.categories));})
+    .error((r, e) => {
         console.log('catgories fetch failed, ', r, e);
     });
-    return [];
+    return {type: PENDING_CATEGORIES, categories: []};
 }
 
 export const RECEIVE_STORES = 'RECEIVE_STORES';
@@ -38,7 +37,7 @@ export function fetchStores(dispatch) {
     }).error((r) => {
         console.log('stores fetch failed');
     });
-    return [];
+    return {type: null};
 }
 
 // export const REQUEST_SPENDERS = 'REQUEST_SPENDERS'
@@ -66,5 +65,5 @@ export function fetchSpenders(dispatch) {
     }).error((r) => {
         console.log('spenders fetch failed');
     });
-    return {};
+    return {type: null};
 }
