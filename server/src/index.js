@@ -27,7 +27,7 @@ var MONTHS = [
     {id: '12', month: 'December'}
 ];
 
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 class LastMonthDate {
     static getYearMonth () {

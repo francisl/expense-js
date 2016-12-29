@@ -3,40 +3,49 @@ var fs = require('fs');
 var os = require('os');
 var process = require('process');
 
-const CONFIG_PATH = function() {
-	const OS_HOME_DATA = os.type() === 'Windows_NT'? '\AppData\\Local' : 'Documents';
+const USER_CONFIG_PATH = function() {
+	const OS_HOME_DATA = os.type() === 'Windows_NT'? '\AppData\\Local\\R-Expenses' : 'Documents/R-Expenses';
 	return path.join(os.homedir(), OS_HOME_DATA);
 }();
+
+const USER_CONFIG_FILE = function() {
+	return path.join(USER_CONFIG_PATH, 'config.json');
+}();
+
+const NODE_ENV = process.env.NODE_ENV || 'default';
 
 
 class Config {
 	constructor() {
 		console.log('loading config file');
-		this.configData = this.getConfig();
-		this.dirname = this.getDirName();
+		this.configData = this.setEnvConfig();
+		this.userConfigData = this.setUserConfig();
 	}
 
-	getConfig() {
-		const NODE_ENV = process.env.NODE_ENV || 'default';
-		const FILE = path.join(process.cwd(), 'config', NODE_ENV.trim(' ') + '.json');
-		console.log('node env : ', FILE);
-		const CONFIG_JSON = fs.readFileSync(FILE);
-		return JSON.parse(CONFIG_JSON);
+	setUserConfig() {
+		console.log('user config file : ', USER_CONFIG_FILE);
+		const userConfigFile = fs.readFileSync(USER_CONFIG_FILE);
+		return JSON.parse(userConfigFile);
 	}
 
-	getDirName() {
-		console.log('USERSFILES ', CONFIG_PATH);
-		return path.join(CONFIG_PATH, 'R-Expenses');
+	setEnvConfig() {
+		const envConfigFile = path.join(process.cwd(), 'config', NODE_ENV.trim(' ') + '.json');
+		console.log('node env : ', envConfigFile);
+		return JSON.parse(fs.readFileSync(envConfigFile));
 	}
 
-	getDbFile() {
-		return path.join(this.dirname, this.configData.db.filename);
+	getDbPath() {
+		return this.userConfigData.dbPath;
 	}
 
 	getDBFilePath() {
-		const DB_FILE = this.getDbFile();
-		console.log('get db filename ::: ', DB_FILE);
 		return this.configData.db.filename === ':memory:' ? ':memory:' : this.getDbFile();
+	}
+
+	getDbFile() {
+		const dbPath = path.join(this.getDbPath(), this.configData.db.filename);
+		console.log('DB Path : ', dbPath);
+		return dbPath;
 	}
 }
 

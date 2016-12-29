@@ -17,7 +17,7 @@ function initDB(database) {
         return currentDB;
     }
 	console.log('DB config filepath : ', config.getDBFilePath());
-	initPathIfNotCreated(config.getDirName());
+	initPathIfNotCreated(config.getDbPath());
     currentDB = new sqlite3.Database(config.getDBFilePath());
 	console.log('current db : ', currentDB);
     return currentDB;
