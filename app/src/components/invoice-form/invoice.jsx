@@ -74,7 +74,8 @@ class InvoiceForm extends Component {
         };
     }
 
-    addInvoice() {
+    addInvoice(e) {
+        e.preventDefault()
         this.setState({ ...this.state, submited: true });
         this.props.actions.addInvoice(this.state.form);
     }
@@ -143,7 +144,7 @@ class InvoiceForm extends Component {
                     </div>
                         <SpendersList className="" spenders={this.props.spenders} onUpdate={this.updateSpenders.bind(this)}/>
                     <div className="field">
-                        <button type="submit" className="ui primary button" onClick={() => this.addInvoice()}>Save</button>
+                        <button className="ui primary button" onClick={(e) => this.addInvoice(e)}>Save</button>
                     </div>
                 </form>
             </div>
