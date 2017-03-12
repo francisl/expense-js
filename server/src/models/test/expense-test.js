@@ -40,7 +40,6 @@ describe('create', function() {
     it("should insert expense when all information are there", function (done) {
         this.timeout(5000);
         const pcount = modelUtils.execSql('select count(*) from expense;');
-        debugger;
         pcount.then(function(d){console.log('then2 : ', d)}).catch(function(e){console.log('error2 : ', e)});
         return expect(pcount).to.eventually.equal("foo");
     });

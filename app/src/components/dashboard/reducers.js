@@ -9,11 +9,11 @@ export function categoriesReducers (state, action) {
     }
     switch (action.type) {
         case RECEIVE_CATEGORIES:
-            console.log('action categories state :::>>> ', state);
+            console.log('action state :::>>> ', state);
             console.log('action categories :::>>> ', action.categories);
             return action.categories;
         default:
-            return [];
+            return state;
     }
 }
 
@@ -25,7 +25,7 @@ export function storesReducers (state, action) {
         case RECEIVE_STORES:
             return action.stores;
         default:
-            return [];
+            return state;
     }
 }
 
@@ -37,6 +37,6 @@ export function spendersReducers (state, action) {
         case RECEIVE_SPENDERS:
             return action.spenders.spenders;
         default:
-            return [];
+            return state;
     }
 }

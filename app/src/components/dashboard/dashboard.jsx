@@ -12,24 +12,26 @@ class InvoiceDashboard extends Component {
         this.props.actions.fetchCategories();
         this.props.actions.fetchStores();
         this.props.actions.fetchSpenders();
+        console.log('InvoiceDashboard Constructor : ', this.props)
     }
 
     render() {
+      console.log('InvoiceDashboard render ...');
         return (
             <div className='container'>
-				<Segment id="invoiceFormSegment">
-	                <InvoiceForm
-	                    stores={this.props.stores}
-	                    categories={this.props.categories}
-	                    spenders={this.props.spenders} />
-				</Segment>
-				<div>
-					<ul>
-						<li><a href="/report">Report</a></li>
-						<li><a href="/stores">Stores</a></li>
-						<li><a href="/categories">Categories</a></li>
-					</ul>
-				</div>
+      				<Segment id="invoiceFormSegment">
+                <InvoiceForm
+                    stores={this.props.stores}
+                    categories={this.props.categories}
+                    spenders={this.props.spenders} />
+      				</Segment>
+      				<div>
+      					<ul>
+      						<li><a href="/report">Report</a></li>
+      						<li><a href="/stores">Stores</a></li>
+      						<li><a href="/categories">Categories</a></li>
+      					</ul>
+      				</div>
             </div>);
     }
 }

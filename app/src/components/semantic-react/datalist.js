@@ -7,9 +7,10 @@ export class DataList extends Component {
         this.state = {
             rendered: undefined
         };
+        console.log('DataList Constructor called....');
     }
 
-    render(){
+    render() {
             const id = this.props.fieldId;
             const key = this.props.listKey;
             const list = this.props.list;

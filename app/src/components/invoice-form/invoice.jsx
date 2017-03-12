@@ -26,7 +26,7 @@ class SpendersList extends Component {
         return <div className="inline field">
                     { this.props.spenders.map(
                         (s) => {
-                            return <div className="ui checkbox" onChange={this.toggleSpenders.bind(this)}>
+                            return <div key={s.id} className="ui checkbox" onChange={this.toggleSpenders.bind(this)}>
                                 <input type="checkbox" name="spenders" value={s.id} />
                                 <label>{s.name}</label>
                             </div>;
@@ -39,7 +39,6 @@ class SpendersList extends Component {
 
 class StatusMessage extends Component {
     render(){
-        console.debug('status : ', this.props.request.status);
         switch(this.props.request.status){
             case REQUEST_STATUS.SUCCESS:
                 return <Message className="green">Invoice created succesfully</Message>;
@@ -60,6 +59,7 @@ class InvoiceForm extends Component {
     constructor(props, context) {
         super(props, context);
         this.setInitialFormData();
+        console.log('InvoiceForm constructor');
     }
 
     setInitialFormData() {
@@ -90,7 +90,6 @@ class InvoiceForm extends Component {
     }
 
     setField(key, e) {
-        console.log('set field change ', key );
         this.state.form[key] = e.target.value;
         this.state.form[key] = e.target.value;
         this.setState(this.state);
@@ -115,10 +114,9 @@ class InvoiceForm extends Component {
     }
 
     render() {
-        console.log('request : ', this.props.form.request);
-        console.log('props : ', this.props);
-
         this.resetFormWhenNeeded();
+        console.log('props spenders : ', this.props.spenders);
+
         return (
             <div>
                 <h4>Add Invoice</h4>
