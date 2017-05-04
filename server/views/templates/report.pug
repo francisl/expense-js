@@ -41,11 +41,11 @@ html
                                             label(for='form_spender_#{spender.id}') #{spender.name}
                             br
                             button(class="ui button", type="submit") Submit
-            
+
             div(class="twelve wide column")
                 h1 Total #{total} $
                 h2 Spender total #{sum} $
-                    
+
                 table(class="ui striped table")
                     thead
                         tr
@@ -59,6 +59,6 @@ html
                             tr
                                 td= val.category
                                 td= val.store
-                                td= val.sum
+                                td= parseFloat(val.sum).toFixed(2)
                                 //- td= val.amount
                                 //- td= val.exp_date
