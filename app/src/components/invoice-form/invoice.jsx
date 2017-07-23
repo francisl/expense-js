@@ -4,37 +4,7 @@ import { connect } from 'react-redux';
 import { addInvoice, REQUEST_STATUS } from './actions';
 import { DataList } from '../semantic-react/datalist';
 import { Message } from '../semantic-react/collections/message';
-
-class SpendersList extends Component {
-    constructor(props, context){
-        super(props, context);
-        this.state = { spenders: new Set()};
-    }
-
-    toggleSpenders(e) {
-        if (e.target.checked){
-            this.state.spenders.add(e.target.value);
-        } else {
-            this.state.spenders.delete(e.target.value);
-        }
-
-        this.setState(this.state);
-        this.props.onUpdate(Array.from(this.state.spenders));
-    }
-
-    render() {
-        return <div className="inline field">
-                    { this.props.spenders.map(
-                        (s) => {
-                            return <div key={s.id} className="ui checkbox" onChange={this.toggleSpenders.bind(this)}>
-                                <input type="checkbox" name="spenders" value={s.id} />
-                                <label>{s.name}</label>
-                            </div>;
-                        })
-                    }
-            </div>;
-        }
-}
+import SpendersList from './spenders-list.jsx';
 
 
 class StatusMessage extends Component {
@@ -54,12 +24,10 @@ class StatusMessage extends Component {
     }
 }
 
-
 class InvoiceForm extends Component {
     constructor(props, context) {
         super(props, context);
         this.setInitialFormData();
-        console.log('InvoiceForm constructor');
     }
 
     setInitialFormData() {
@@ -68,7 +36,8 @@ class InvoiceForm extends Component {
                 category: '',
                 store: '',
                 date: this.getToday(),
-                amount: ''
+                amount: '',
+                spenders: []
             },
             submited: false
         };
@@ -115,7 +84,6 @@ class InvoiceForm extends Component {
 
     render() {
         this.resetFormWhenNeeded();
-        console.log('props spenders : ', this.props.spenders);
 
         return (
             <div>
@@ -140,7 +108,7 @@ class InvoiceForm extends Component {
                     <div className="field">
                         <input required type="text" placeholder="Amount" value={this.state.form.amount} onChange={this.setAmount.bind(this)}/>
                     </div>
-                        <SpendersList className="" spenders={this.props.spenders} onUpdate={this.updateSpenders.bind(this)}/>
+                        <SpendersList className="" spenders={this.props.spenders} selected={this.state.form.spenders} onUpdate={this.updateSpenders.bind(this)}/>
                     <div className="field">
                         <button className="ui primary button" onClick={(e) => this.addInvoice(e)}>Save</button>
                     </div>
