@@ -1,7 +1,6 @@
 import $ from 'jquery';
 // import '../styles/foundation/app.scss';
 // import '../styles/main.scss';
-import 'file?name=[name].[ext]!../index.html';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider, connect } from 'react-redux';

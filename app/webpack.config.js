@@ -15,15 +15,14 @@ module.exports = {
 		publicPath: '/static/'
 	},
 	devtool: 'eval',// 'source-map',
-	debug: true,
 	resolve: {
-		extensions: ['', '.webpack.js', '.web.js','.js']
+		extensions: ['.webpack.js', '.web.js','.js']
 	},
 	module: {
-		loaders: [
+		rules: [
 			{	test: /\.(js|jsx)?$/,
 				exclude: /(node_modules)/,
-				loaders: ['babel'],
+				use: ['babel-loader'],
 				include: [path.join(sourceDir, 'app.jsx'),
 							path.join(sourceDir, 'stores'),
 							path.join(sourceDir, 'components')]
@@ -32,7 +31,11 @@ module.exports = {
 				test: /\.(s?css|sass)$/,
 				include: path.join(__dirname, 'styles'),
 				exclude: path.join(__dirname, 'styles/foundation'),
-				loader: ExtractTextPlugin.extract('style', 'css!autoprefixer?browsers=last 3 versions!sass')
+				use: [
+					'style-loader', 
+					'!css-loader!autoprefixer-loader?browsers=last 3 versions',
+					'sass-loader',
+				]
 			},
 			//{
 			// // loader just for foundation
@@ -46,17 +49,14 @@ module.exports = {
 			// 	loader: "style-loader!css-loader" }
 		]
 	},
-	// path to foundation scss files for correct resolving sass imports
-	sassLoader: {
-		includePaths: [
-			// path.resolve(__dirname, 'node_modules/foundation-sites/scss/'),
-		],
-	},
 	plugins: [
 		new ExtractTextPlugin('styles/main.css?[hash]-[chunkhash]-[contenthash]-[name]', {
 			disable: false,
 			allChunks: true
-		})
+		}),
+		new webpack.LoaderOptionsPlugin({
+			debug: true
+		}),
 	],
 	// devServer: {
 	// 	proxy: {
