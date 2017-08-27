@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import fetch from 'isomorphic-fetch';
 
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
 export const PENDING_CATEGORIES = 'PENDING_CATEGORIES';
@@ -12,12 +13,15 @@ function receiveCategories(categories) {
     };
 }
 export function fetchCategories(dispatch) {
-    $.ajax({ method: "GET", url: "/api/category/",})
-    .success(function(result){
-        dispatch(receiveCategories(result.categories));})
-    .error((r, e) => {
-        console.log('catgories fetch failed, ', r, e);
-    });
+    fetch("/api/category/")
+        .then((response) =>{
+            if (response.status >= 400) {
+                throw new Error('catgories fetch failed, ', r, e);
+            }
+            return response.json();        
+        }).then((data) => {
+            dispatch(receiveCategories(data.categories));
+        })
     return {type: PENDING_CATEGORIES, categories: []};
 }
 
@@ -28,24 +32,20 @@ function receiveStores(stores) {
         stores
     };
 }
+
 export function fetchStores(dispatch) {
-    $.ajax({
-      method: "GET",
-      url: "/api/stores/",
-    }).success(function(result){
-        dispatch(receiveStores(result.stores));
-    }).error((r) => {
-        console.log('stores fetch failed');
-    });
+    fetch("/api/stores/")
+    .then((response) =>{
+        if (response.status >= 400) {
+            throw new Error('stores fetch failed, ', r, e);
+        }
+        return response.json();        
+    }).then((data) => {
+        dispatch(receiveStores(data.stores));
+    })
+
     return {type: null};
 }
-
-// export const REQUEST_SPENDERS = 'REQUEST_SPENDERS'
-// function requestSpenders() {
-//     return {
-//         type: REQUEST_SPENDERS
-//     };
-// }
 
 export const RECEIVE_SPENDERS = 'RECEIVE_SPENDERS';
 function receiveSpenders(spenders) {
@@ -56,14 +56,15 @@ function receiveSpenders(spenders) {
 }
 
 export function fetchSpenders(dispatch) {
-    $.ajax({
-        method: "GET",
-        url: "/api/spenders/",
-    }).success(function(results){
-        dispatch(receiveSpenders(results));
-        // actions.spenders.fetchSpenders(result.spenders);
-    }).error((r) => {
-        console.log('spenders fetch failed');
-    });
+    fetch("/api/spenders/")
+    .then((response) =>{
+        if (response.status >= 400) {
+            throw new Error('spenders fetch failed, ', r, e);
+        }
+        return response.json();        
+    }).then((data) => {
+        dispatch(receiveSpenders(data));
+    })
+
     return {type: null};
 }
