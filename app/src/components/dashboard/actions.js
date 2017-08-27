@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import fetch from 'isomorphic-fetch';
 
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
