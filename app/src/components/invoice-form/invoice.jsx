@@ -5,7 +5,7 @@ import { addInvoice, REQUEST_STATUS } from './actions';
 import { DataList } from '../semantic-react/datalist';
 import { Message } from '../semantic-react/collections/message';
 import SpendersList from './spenders-list.jsx';
-
+import { InputGroup } from "@blueprintjs/core";
 
 class StatusMessage extends Component {
     render(){
@@ -28,6 +28,8 @@ class InvoiceForm extends Component {
     constructor(props, context) {
         super(props, context);
         this.setInitialFormData();
+        this.setCategory = this.setField.bind(this, 'category');
+        this.setStore = this.setField.bind(this, 'store');
     }
 
     setInitialFormData() {
@@ -90,18 +92,12 @@ class InvoiceForm extends Component {
                 <h4>Add Invoice</h4>
                 <StatusMessage request={this.props.form.request}/>
                 <form className="ui form">
-                    <div className="field">
-                        <input required type="text" autoFocus={true} list="CategoryList" placeholder="Category" value={this.state.form.category} onChange={this.setField.bind(this, 'category')}/>
-                    </div>
-                    <div className="field">
-                        <DataList list={this.props.categories} fieldId="CategoryList" listKey="name" />
-                    </div>
-                    <div className="field">
-                        <input required type="text" list="StoreList" placeholder="Store" value={this.state.form.store} onChange={this.setField.bind(this, 'store')}/>
-                    </div>
-                    <div className="field">
-                        <DataList list={this.props.stores} fieldId="StoreList" listKey="name" />
-                    </div>
+                    <InputGroup required placeholder="Categories" list="CategoryList" value={this.state.form.category} onChange={this.setCategory} autoFocus={true} />
+                    <DataList list={this.props.categories} fieldId="CategoryList" listKey="name" />
+
+                    <InputGroup required placeholder="Store" list="StoreList" value={this.state.form.store} onChange={this.setStore}/>
+                    <DataList list={this.props.stores} fieldId="StoreList" listKey="name" />
+
                     <div className="field">
                         <input required type="date" placeholder="Date" value={this.state.form.date} onChange={this.setField.bind(this, 'date')}/>
                     </div>

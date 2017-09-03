@@ -35,7 +35,7 @@ function sentInvoice(response) {
 export function addInvoice(form) {
     return (dispatch, getState) => {
         fetch("/api/invoice/", {
-            method: "POST", 
+            method: "POST",
             headers: new Headers({
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -46,11 +46,10 @@ export function addInvoice(form) {
             if (response.status >= 400) {
                 dispatch(errorInvoice(status, error));
                 throw new Error('catgories fetch failed, ', r, e);
-    
             }
-            return response.json();        
+            return response.json();
         }).then((data) => {
-            dispatch(receiveInvoice(results));
+            dispatch(receiveInvoice(data));
         })
         dispatch(sentInvoice());
     };
