@@ -1,4 +1,5 @@
-import $ from 'jquery';
+import fetch from 'isomorphic-fetch';
+
 export const ADD_INVOICE = 'ADD_INVOICE';
 
 export const REQUEST_STATUS = {
@@ -33,16 +34,24 @@ function sentInvoice(response) {
 
 export function addInvoice(form) {
     return (dispatch, getState) => {
-        $.ajax({
-            method: "POST",
-            url: "/api/invoice/",
-            contentType: 'application/json',
-            data: JSON.stringify(form)
-        }).success((results) => {
+        fetch("/api/invoice/", {
+            method: "POST", 
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            }),
+            body: JSON.stringify(form)
+            })
+        .then((response) =>{
+            if (response.status >= 400) {
+                dispatch(errorInvoice(status, error));
+                throw new Error('catgories fetch failed, ', r, e);
+    
+            }
+            return response.json();        
+        }).then((data) => {
             dispatch(receiveInvoice(results));
-        }).error((xhr, status, error) => {
-            dispatch(errorInvoice(status, error));
-        });
+        })
         dispatch(sentInvoice());
     };
 }
