@@ -5,7 +5,11 @@ import { addInvoice, REQUEST_STATUS } from './actions';
 import { DataList } from '../semantic-react/datalist';
 import { Message } from '../semantic-react/collections/message';
 import SpendersList from './spenders-list.jsx';
-import { InputGroup } from "@blueprintjs/core";
+import { Button, InputGroup } from '@blueprintjs/core';
+import { DatePicker } from '@blueprintjs/datetime';
+import DayPicker from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
+import { Layout } from 'baer';
 
 class StatusMessage extends Component {
     render(){
@@ -61,6 +65,7 @@ class InvoiceForm extends Component {
     }
 
     setField(key, e) {
+        console.log('set field for : ', key, e.target.value );
         this.state.form[key] = e.target.value;
         this.state.form[key] = e.target.value;
         this.setState(this.state);
@@ -88,28 +93,23 @@ class InvoiceForm extends Component {
         this.resetFormWhenNeeded();
 
         return (
-            <div>
-                <h4>Add Invoice</h4>
+            <Layout size="34em" vertical center>
                 <StatusMessage request={this.props.form.request}/>
-                <form className="ui form">
-                    <InputGroup required placeholder="Categories" list="CategoryList" value={this.state.form.category} onChange={this.setCategory} autoFocus={true} />
-                    <DataList list={this.props.categories} fieldId="CategoryList" listKey="name" />
 
-                    <InputGroup required placeholder="Store" list="StoreList" value={this.state.form.store} onChange={this.setStore}/>
-                    <DataList list={this.props.stores} fieldId="StoreList" listKey="name" />
+                <InputGroup required placeholder="Categories" list="CategoryList" value={this.state.form.category} onChange={this.setCategory} autoFocus={true} />
+                <DataList list={this.props.categories} fieldId="CategoryList" listKey="name" />
 
-                    <div className="field">
-                        <input required type="date" placeholder="Date" value={this.state.form.date} onChange={this.setField.bind(this, 'date')}/>
-                    </div>
-                    <div className="field">
-                        <input required type="text" placeholder="Amount" value={this.state.form.amount} onChange={this.setAmount.bind(this)}/>
-                    </div>
-                        <SpendersList className="" spenders={this.props.spenders} selected={this.state.form.spenders} onUpdate={this.updateSpenders.bind(this)}/>
-                    <div className="field">
-                        <button className="ui primary button" onClick={(e) => this.addInvoice(e)}>Save</button>
-                    </div>
-                </form>
-            </div>
+                <InputGroup required placeholder="Store" list="StoreList" value={this.state.form.store} onChange={this.setStore}/>
+                <DataList list={this.props.stores} fieldId="StoreList" listKey="name" />
+
+                <DayPicker  value={this.state.form.date} onBlur={this.setField.bind(this, 'date')} />
+                <InputGroup required type="text" placeholder="Amount" value={this.state.form.amount} onChange={this.setAmount.bind(this)}/>
+
+                <SpendersList className="" spenders={this.props.spenders} selected={this.state.form.spenders} onUpdate={this.updateSpenders.bind(this)}/>
+
+                <Button onClick={(e) => this.addInvoice(e)} text="Save" />
+
+          </Layout>
         );
     }
 } 

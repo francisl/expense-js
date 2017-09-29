@@ -1,10 +1,10 @@
 body {
-	background: #ccddee;
 	padding: 20px;
 }
 
-.container {
-	display: flex;
+input {
+	margin-top: 4px;
+	margin-bottom: 10px;
 }
 
 #invoiceFormSegment {

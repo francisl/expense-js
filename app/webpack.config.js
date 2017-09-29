@@ -17,37 +17,24 @@ module.exports = {
 	},
 	devtool: 'eval',// 'source-map',
 	resolve: {
-		extensions: ['.webpack.js', '.web.js','.js']
+		extensions: ['.webpack.js', '.web.js','.js', '.jsx']
 	},
 	module: {
-		rules: [
-			{	test: /\.(js|jsx)?$/,
+		loaders: [
+			{	test: /\.jsx?$/,
 				exclude: /(node_modules)/,
-				use: ['babel-loader'],
-				include: [path.join(sourceDir, 'app.jsx'),
-							path.join(sourceDir, 'stores'),
-							path.join(sourceDir, 'components')]
+				loader: ['babel-loader'],
 			},
 			{ // loader for all scss, sass, css files excluding foundation
-				test: /\.(s?css|sass)$/,
+				test: /\.(scss|sass)$/,
 				include: path.join(__dirname, 'styles'),
-				exclude: path.join(__dirname, 'styles/foundation'),
-				use: [
-					'style-loader', 
-					'!css-loader!autoprefixer-loader?browsers=last 3 versions',
+				loader: [
+					'style-loader',
+					'css-loader!autoprefixer-loader?browsers=last 3 versions',
 					'sass-loader',
 				]
 			},
-			//{
-			// // loader just for foundation
-			// 	test: /\.scss$/,
-			// 	include: path.join(__dirname, 'styles/foundation'),
-			// 	loader: ExtractTextPlugin.extract('style', 'css!autoprefixer?browsers=last 3 versions!sass'),
-			// },
-			// {	test: /\.css$/,
-			// 	include: path.join(__dirname, 'styles'),
-			// 	exclude: path.join(__dirname, 'styles/foundation'),
-			// 	loader: "style-loader!css-loader" }
+			{ test: /\.css$/, loader: "style-loader!css-loader" },
 		]
 	},
 	plugins: [
@@ -63,11 +50,5 @@ module.exports = {
 			cache: true,
 			template: 'src/index.html'
 		}),
-	],
-	// devServer: {
-	// 	proxy: {
-	//     	'/api/*': { target: 'http://0.0.0.0:5000/' }
-	// 	}
-	// }
-
+	]
 };

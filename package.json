@@ -16,6 +16,5 @@
   "author": "Francis Lavoie",
   "license": "GPL-3.0",
   "dependencies": {},
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

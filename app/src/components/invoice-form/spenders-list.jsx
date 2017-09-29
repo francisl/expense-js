@@ -5,6 +5,7 @@ import _ from 'lodash';
 export default class SpendersList extends Component {
     constructor(props, context){
         super(props, context);
+        this.onCheck = this.onCheck.bind(this);
     }
 
     getSelectedSpenders(target) {
@@ -16,7 +17,7 @@ export default class SpendersList extends Component {
         });
     }
 
-    onCheck = (e) => {
+    onCheck(e) {
         this.props.onUpdate(this.getSelectedSpenders(e.target));
     }
 
