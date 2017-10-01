@@ -7,6 +7,6 @@ input {
 	margin-bottom: 10px;
 }
 
-#invoiceFormSegment {
-	width: 22%;
+.large-input {
+	width: 92%;
 }

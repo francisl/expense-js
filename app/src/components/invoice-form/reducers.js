@@ -4,8 +4,6 @@ import {
     ERROR_INVOICE,
     REQUEST_STATUS } from './actions';
 
-
-
  export function invoiceReducer (state, action) {
      if (typeof state === 'undefined') {
          return {request: { status: REQUEST_STATUS.NOACTION}};

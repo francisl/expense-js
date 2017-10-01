@@ -1,6 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import _ from 'lodash';
+import { Checkbox } from '@blueprintjs/core';
 
 export default class SpendersList extends Component {
     constructor(props, context){
@@ -22,15 +23,13 @@ export default class SpendersList extends Component {
     }
 
     render() {
-        return <div className="inline field">
-                    { this.props.spenders.map(
-                        (s) => {
-                            return <div key={s.id} className="ui checkbox" onChange={this.onCheck}>
-                                <input type="checkbox" name="spenders" value={s.id} checked={ _.some(this.props.selected, (e) => { return parseInt(e) === s.id })} />
-                                <label>{s.name}</label>
-                            </div>;
-                        })
-                    }
-            </div>;
-        }
+      const spenders = this.props.spenders.map((s) => (
+        <Checkbox
+          key={s.id}
+          onChange={this.onCheck}
+          name="spenders"
+          value={s.id}
+          label={s.name} />));
+      return (<div className="large-input">{spenders}</div>);
+    }
 }

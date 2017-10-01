@@ -3,30 +3,13 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { addInvoice, REQUEST_STATUS } from './actions';
 import { DataList } from '../semantic-react/datalist';
-import { Message } from '../semantic-react/collections/message';
 import SpendersList from './spenders-list.jsx';
-import { Button, InputGroup } from '@blueprintjs/core';
+import { Button, Classes, InputGroup } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { Layout } from 'baer';
-
-class StatusMessage extends Component {
-    render(){
-        switch(this.props.request.status){
-            case REQUEST_STATUS.SUCCESS:
-                return <Message className="green">Invoice created succesfully</Message>;
-            case REQUEST_STATUS.PENDING:
-                return <Message className="blue">Pending...</Message>;
-            case REQUEST_STATUS.ERROR:
-                return <Message className="red">
-                    <p>Error Creating Invoice: {this.props.request.error.status} | {this.props.request.error.error}</p>
-                </Message>;
-            default:
-                return <div></div>;
-        }
-    }
-}
+import StatusMessage from './status-message';
 
 class InvoiceForm extends Component {
     constructor(props, context) {
@@ -34,6 +17,7 @@ class InvoiceForm extends Component {
         this.setInitialFormData();
         this.setCategory = this.setField.bind(this, 'category');
         this.setStore = this.setField.bind(this, 'store');
+        this.onDateClicked = this.onDateClicked.bind(this);
     }
 
     setInitialFormData() {
@@ -47,6 +31,7 @@ class InvoiceForm extends Component {
             },
             submited: false
         };
+        this.setState(this.state);
     }
 
     addInvoice(e) {
@@ -65,10 +50,15 @@ class InvoiceForm extends Component {
     }
 
     setField(key, e) {
-        console.log('set field for : ', key, e.target.value );
+        console.log('set field for : ', key, e );
         this.state.form[key] = e.target.value;
         this.state.form[key] = e.target.value;
         this.setState(this.state);
+    }
+
+    onDateClicked(d) {
+      this.state.form.date = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+      this.setState(this.state);
     }
 
     setAmount(e){
@@ -93,21 +83,21 @@ class InvoiceForm extends Component {
         this.resetFormWhenNeeded();
 
         return (
-            <Layout size="34em" vertical center>
+            <Layout layout="{width: '236px', padding:'2px'}" vertical center>
                 <StatusMessage request={this.props.form.request}/>
 
-                <InputGroup required placeholder="Categories" list="CategoryList" value={this.state.form.category} onChange={this.setCategory} autoFocus={true} />
+                <InputGroup className={`${Classes.LARGE} large-input`} required placeholder="Categories" list="CategoryList" value={this.state.form.category} onChange={this.setCategory} autoFocus={true} />
                 <DataList list={this.props.categories} fieldId="CategoryList" listKey="name" />
 
-                <InputGroup required placeholder="Store" list="StoreList" value={this.state.form.store} onChange={this.setStore}/>
+                <InputGroup className={`${Classes.LARGE} large-input`} required placeholder="Store" list="StoreList" value={this.state.form.store} onChange={this.setStore}/>
                 <DataList list={this.props.stores} fieldId="StoreList" listKey="name" />
 
-                <DayPicker  value={this.state.form.date} onBlur={this.setField.bind(this, 'date')} />
-                <InputGroup required type="text" placeholder="Amount" value={this.state.form.amount} onChange={this.setAmount.bind(this)}/>
+                <DayPicker value={this.state.form.date} onDayClick={this.onDateClicked} selectedDays={new Date()}/>
+                <InputGroup className={`${Classes.LARGE} large-input`} required type="text" placeholder="Amount" value={this.state.form.amount} onChange={this.setAmount.bind(this)}/>
 
-                <SpendersList className="" spenders={this.props.spenders} selected={this.state.form.spenders} onUpdate={this.updateSpenders.bind(this)}/>
+                <SpendersList className="large-input" spenders={this.props.spenders} selected={this.state.form.spenders} onUpdate={this.updateSpenders.bind(this)}/>
 
-                <Button onClick={(e) => this.addInvoice(e)} text="Save" />
+                <Button className="large-input" onClick={(e) => this.addInvoice(e)} text="Save" />
 
           </Layout>
         );
