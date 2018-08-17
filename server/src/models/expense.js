@@ -120,7 +120,7 @@ class ExpenseSQL {
             ExpenseSQL.getExistingExpense(categoryId, storeId, date, amount)
             .then((data) => {
                 if (data === undefined){
-                    var newExpSql = 'INSERT INTO expense (category_id, store_id, exp_date, amount) values (?, ?, ?, ?);';
+                    var newExpSql = 'INSERT INTO expense (category_id, store_id, exp_date, amount) values (?, ?, DATE(?), ?);';
                     db.sqlite.run(newExpSql, [categoryId, storeId, date, amount], (err) => {
                         ExpenseSQL.insertSpenders(categoryId, storeId, date, amount, spenders)
                         .then((expenseId) => { resolve(expenseId) })
@@ -133,6 +133,14 @@ class ExpenseSQL {
         });
     }
 
+    static formatDate(date) {
+        const splitedDate = date.split('-');
+        const year = splitedDate[0];
+        const month = ('0' + splitedDate[1]).slice(-2);
+        const day = ('0' + splitedDate[2]).slice(-2);
+        return `${year}-${month}-${day}`
+    }
+
     static create(category, store, date, amount, spenders=[]){
         if (category === undefined ||
             store === undefined ||
@@ -141,6 +149,7 @@ class ExpenseSQL {
             spenders.length <= 0){
             return false;
         }
+        const formattedDate = this.formatDate(date);
         return new Promise((resolve, reject) => {
             Promise.all([
                 Category.getOrCreate(category),
@@ -149,7 +158,7 @@ class ExpenseSQL {
                 ExpenseSQL.insertExpense(
                     data[0],
                     data[1],
-                    date,
+                    formattedDate,
                     amount,
                     spenders
                 ).then((expenseId) => {

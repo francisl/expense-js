@@ -2,15 +2,15 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { each } from 'lodash';
-
-import { addInvoice, REQUEST_STATUS } from './actions';
-import { DataList } from '../semantic-react/datalist';
-import SpendersList from './spenders-list.jsx';
-import { Button, Classes, InputGroup } from '@blueprintjs/core';
+import { Button, Classes, InputGroup, Position, Toaster } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { Layout } from 'baer';
+
+import { addInvoice, REQUEST_STATUS } from './actions';
+import { DataList } from '../semantic-react/datalist';
+import SpendersList from './spenders-list.jsx';
 import StatusMessage from './status-message';
 
 class InvoiceForm extends Component {
@@ -59,7 +59,6 @@ class InvoiceForm extends Component {
             },
             submited: false
         };
-        this.setState(this.state);
     }
 
     addInvoice(e) {

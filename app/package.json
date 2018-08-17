@@ -19,9 +19,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@blueprintjs/core": "^1.26.0",
-    "@blueprintjs/datetime": "^1.22.0",
-    "baer": "^1.0.0",
+    "@blueprintjs/core": ">1.35.0",
+    "@blueprintjs/datetime": ">1.22.0",
     "fetch": "^1.1.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
