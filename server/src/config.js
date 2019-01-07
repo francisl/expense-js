@@ -1,52 +1,75 @@
-var path = require('path');
-var fs = require('fs');
-var os = require('os');
-var process = require('process');
+const path = require('path')
+const fs = require('fs')
+const process = require('process')
+const multios = require('./utils/ospath')
 
-const USER_CONFIG_PATH = function() {
-	const OS_HOME_DATA = os.type() === 'Windows_NT'? '\AppData\\Local\\R-Expenses' : 'Documents/R-Expenses';
-	return path.join(os.homedir(), OS_HOME_DATA);
-}();
+const NODE_ENV = process.env.NODE_ENV || 'default'
 
-const USER_CONFIG_FILE = function() {
-	return path.join(USER_CONFIG_PATH, 'config.json');
-}();
+class UserConfig {
+	static getFile() {
+		return path.join(multios.appLocalPath(), 'config.json')
+	}
 
-const NODE_ENV = process.env.NODE_ENV || 'default';
+	static createUserConfigWhenNeeded() {
+		if (fs.existsSync(UserConfig.getFile())) return
 
+		console.log('INIT: Create user config : ', UserConfig.getFile())
+		if (!fs.existsSync(multios.appLocalPath())) {
+			fs.mkdirSync(multios.appLocalPath())
+		}
+		const content = { dbPath: multios.appDataPath() }
+		fs.writeFileSync(UserConfig.getFile(), JSON.stringify(content), (err) => {
+			if (err) throw err
+			console.log("New Config file created!")
+		})
+	}
 
-class Config {
 	constructor() {
-		console.log('loading config file');
-		this.configData = this.setEnvConfig();
-		this.userConfigData = this.setUserConfig();
+		console.log('loading user config')
+		this.userConfigData = this.load()
 	}
 
-	setUserConfig() {
-		console.log('user config file : ', USER_CONFIG_FILE);
-		const userConfigFile = fs.readFileSync(USER_CONFIG_FILE);
-		return JSON.parse(userConfigFile);
+	load() {
+		UserConfig.createUserConfigWhenNeeded()
+		return JSON.parse(fs.readFileSync(UserConfig.getFile()))
 	}
 
-	setEnvConfig() {
-		const envConfigFile = path.join(process.cwd(), 'config', NODE_ENV.trim(' ') + '.json');
-		console.log('node env : ', envConfigFile);
-		return JSON.parse(fs.readFileSync(envConfigFile));
-	}
-
-	getDbPath() {
-		return this.userConfigData.dbPath;
-	}
-
-	getDBFilePath() {
-		return this.configData.db.filename === ':memory:' ? ':memory:' : this.getDbFile();
-	}
-
-	getDbFile() {
-		const dbPath = path.join(this.getDbPath(), this.configData.db.filename);
-		console.log('DB Path : ', dbPath);
-		return dbPath;
+	get dbDirPath() {
+		if (this.userConfigData.dbPath) return this.userConfigData.dbPath
 	}
 }
 
-module.exports = new Config();
+class DBConfig {
+	constructor() {
+		console.log('loading db config')
+		this.configData = this.load()
+		this.userConfig = new UserConfig()
+		this.dbpath = path.join(this.userConfig.dbDirPath, 'data')
+		this.newDB = false
+		this.initPathIfNotCreated(this.dbpath)
+	}
+
+	load() {
+		console.log('loading application config : ', envConfigFile)
+		const envConfigFile = path.join(process.cwd(), 'config', NODE_ENV.trim(' ') + '.json')
+		return JSON.parse(fs.readFileSync(envConfigFile))
+	}
+
+	initPathIfNotCreated(dir) {
+		if (!fs.existsSync(dir)){
+			console.log('INIT: Create DB dir : ', dir)
+			fs.mkdirSync(dir)
+			this.newDB = true
+		}
+	}
+	getDBPath() {
+		return this.configData.db.filename === ':memory:' ? ':memory:' : this.getDbFile()
+	}
+
+	getDbFile() {
+		
+		return path.join(this.dbpath, this.configData.db.filename)
+	}
+}
+
+module.exports = new DBConfig()

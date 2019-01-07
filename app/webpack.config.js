@@ -20,7 +20,7 @@ module.exports = {
 		extensions: ['.webpack.js', '.web.js','.js', '.jsx']
 	},
 	module: {
-		loaders: [
+		rules: [
 			{	test: /\.jsx?$/,
 				exclude: /(node_modules)/,
 				loader: ['babel-loader'],

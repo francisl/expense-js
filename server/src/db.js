@@ -1,36 +1,38 @@
-var sqlite3 = require('sqlite3');
-var config = require('./config');
-var fs = require('fs');
-
-function initPathIfNotCreated(dir) {
-	console.log('INIT: Check if db dir exist: ', dir);
-	if (!fs.existsSync(dir)){
-		console.log('INIT: Create DB dir : ', dir);
-	    fs.mkdirSync(dir);
-	}
-}
+const sqlite3 = require('sqlite3')
+const dbConfig = require('./config')
+const fs = require('fs')
 
 var currentDB;
 function initDB(database) {
+    let newDB = false
     if (currentDB) {
         console.info('Reuse database :: ', currentDB);
         return currentDB;
     }
-	console.log('DB config filepath : ', config.getDBFilePath());
-	initPathIfNotCreated(config.getDbPath());
-    currentDB = new sqlite3.Database(config.getDBFilePath());
-	console.log('current db : ', currentDB);
-    return currentDB;
+    if (!fs.existsSync(dbConfig.getDBPath())) {
+        newDB = true
+    }
+    currentDB = new sqlite3.Database(dbConfig.getDBPath())
+    if (newDB) {
+        createSchemaSql().map((query) => {
+            console.log('creating .. ', query)
+            currentDB.exec(query, (err, data) => {
+                if (err) console.log('reject ::: ', err)
+            })
+        });
+    }
+    return currentDB
 }
 
+
 function dropSchemaSql() {
-    console.log('Drop schema... ');
+    console.log('Drop schema... ')
     return [
         `DROP TABLE IF EXISTS store;`,
         `DROP TABLE IF EXISTS spender;`,
         `DROP TABLE IF EXISTS category;`,
         `DROP TABLE IF EXISTS expense;`,
-        `DROP TABLE IF EXISTS exp2spender_assoc;`];
+        `DROP TABLE IF EXISTS exp2spender_assoc;`]
 }
 
 function createSchemaSql() {
@@ -62,7 +64,7 @@ function createSchemaSql() {
         	spender_id INTEGER,
         	FOREIGN KEY(exp_id) REFERENCES expense (id),
         	FOREIGN KEY(spender_id) REFERENCES spender (id)
-        )`];
+        )`]
 }
 
 module.exports = {
@@ -70,4 +72,4 @@ module.exports = {
     initDB,
     createSchemaSql,
     dropSchemaSql
-};
+}
