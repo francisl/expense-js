@@ -30,6 +30,7 @@
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.0",
     "react-router": "^4.2.0",
+    "reason-react": "^0.5.3",
     "redux": "^3.0.2",
     "redux-thunk": "^2.0.0",
     "styled-components": "^2.1.2"
@@ -47,6 +48,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-react-hmre": "^1.1.0",
     "babel-preset-stage-0": "^6.5.0",
+    "bs-platform": "^4.0.17",
     "classnames": "^2.2.6",
     "cross-env": "^5.2.0",
     "css-loader": "^2.0.0",
@@ -68,7 +70,7 @@
     "url-loader": "^1.1.2",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10"
+    "webpack-dev-server": "^3.1.14"
   },
   "jshintConfig": {
     "esnext": true
