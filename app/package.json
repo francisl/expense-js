@@ -8,12 +8,15 @@
   },
   "main": "index.html",
   "scripts": {
-    "build": "webpack",
+    "build": "bsb && webpack",
     "build:watch": "webpack -w",
     "hotreload": "node webpack-hotreload.js",
     "start": "webpack-dev-server --progress --color --host 0.0.0.0 --port 3000 --watch ",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "precommit": "eslint ."
+    "precommit": "eslint .",
+    "bsb": "bsb -make-world",
+    "bsb:watch": "bsb -make-world -w",
+    "bsb:clean": "bsb -clean-world"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +24,8 @@
   "dependencies": {
     "@blueprintjs/core": "^3.10.0",
     "@blueprintjs/datetime": "^3.5.0",
+    "@jsiebern/bs-material-ui": "^1.0.0",
+    "@material-ui/core": "^3.8.3",
     "fetch": "^1.1.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.11",
@@ -30,6 +35,7 @@
     "react-dom": "^15.6.2",
     "react-redux": "^5.1.1",
     "react-router": "^4.3.1",
+    "reason-react": "^0.5.3",
     "redux": "^3.0.2",
     "redux-thunk": "^2.3.0",
     "styled-components": "^2.4.1"
@@ -39,6 +45,7 @@
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
+    "@jsiebern/bs-material-ui-ppx": "^1.0.2",
     "babel": "^6.5.2",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
