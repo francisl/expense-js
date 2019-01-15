@@ -8,6 +8,7 @@ import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { Layout } from 'baer';
 
+import { jsSubmitButton as SubmitButton } from './SubmitButton.bs'
 import { addInvoice, REQUEST_STATUS } from './actions';
 import { DataList } from '../semantic-react/datalist';
 import SpendersList from './spenders-list.jsx';
@@ -17,6 +18,7 @@ class InvoiceForm extends Component {
     constructor(props, context) {
         super(props, context);
         this.setInitialFormData();
+        this.addInvoice = this.addInvoice.bind(this)
         this.setCategory = this.setField.bind(this, 'category');
         this.setStore = this.setField.bind(this, 'store');
         this.updateSpenders = this.updateSpenders.bind(this);
@@ -126,7 +128,8 @@ class InvoiceForm extends Component {
                   spenders={this.props.spenders}
                   onUpdate={this.updateSpenders}/>
 
-                <Button className="large-input" onClick={(e) => this.addInvoice(e)} text="Save" />
+                
+                <SubmitButton onClick={this.addInvoice} text="Save" />
 
           </Layout>
         );
