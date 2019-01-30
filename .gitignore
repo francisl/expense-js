@@ -7,3 +7,4 @@ dist/
 semantic/
 *.sqlite
 .idea/
+app/.merlin
