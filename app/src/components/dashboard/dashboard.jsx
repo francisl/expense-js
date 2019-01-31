@@ -1,12 +1,9 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import InvoiceForm from '../invoice-form/invoice.jsx';
 import { fetchCategories, fetchStores, fetchSpenders } from './actions';
-import { Segment } from '../semantic-react/elements/segment';
-import { Layout } from 'baer';
-
+// import { Layout } from 'baer/dist/layouts/layout';
 
 class InvoiceDashboard extends Component {
     constructor(props, context) {
@@ -19,19 +16,19 @@ class InvoiceDashboard extends Component {
 
     render() {
         return (
-            <Layout>
+            <div>
                 <InvoiceForm id="SideLayout"
                     stores={this.props.stores}
                     categories={this.props.categories}
                     spenders={this.props.spenders} />
-               <Layout vertical stretch>
+               <div vertical stretch>
                   <ul>
                     <li><a href="/report">Report</a></li>
                     <li><a href="/stores">Stores</a></li>
                     <li><a href="/categories">Categories</a></li>
                   </ul>
-              </Layout>
-            </Layout>);
+              </div>
+            </div>);
     }
 }
 

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Button, Classes, InputGroup } from '@blueprintjs/core';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { Layout } from 'baer';
+// import Layout from 'baer/dist/layouts/layout';
 
 import { addInvoice, REQUEST_STATUS } from './actions';
 import { DataList } from '../semantic-react/datalist';
@@ -107,7 +107,7 @@ class InvoiceForm extends Component {
         console.log('props spenders : ', this.props.spenders);
         console.log('spenders : ', this.state.form.spenders);
         return (
-            <Layout layout="{width: '236px', padding:'2px'}" vertical center>
+            <div layout="{width: '236px', padding:'2px'}" vertical center>
                 <StatusMessage request={this.props.form.request}/>
 
                 <InputGroup className={`${Classes.LARGE} large-input`} required placeholder="Categories" list="CategoryList" value={this.state.form.category} onChange={this.setCategory} autoFocus={true} />
@@ -126,7 +126,7 @@ class InvoiceForm extends Component {
 
                 <Button className="large-input" onClick={(e) => this.addInvoice(e)} text="Save" />
 
-          </Layout>
+          </div>
         );
     }
 } 
