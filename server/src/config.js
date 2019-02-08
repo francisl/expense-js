@@ -47,6 +47,7 @@ class DBConfig {
 		this.dbpath = path.join(this.userConfig.dbDirPath, 'data')
 		this.newDB = false
 		this.initPathIfNotCreated(this.dbpath)
+		console.log('db path : ', this.dbpath)
 	}
 
 	load() {
@@ -67,8 +68,9 @@ class DBConfig {
 	}
 
 	getDbFile() {
-		
-		return path.join(this.dbpath, this.configData.db.filename)
+		const dbFile = path.join(this.dbpath, this.configData.db.filename)
+		console.log('Using DB file : ', dbFile)
+		return dbFile
 	}
 }
 

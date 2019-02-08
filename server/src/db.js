@@ -15,7 +15,7 @@ function initDB(database) {
     currentDB = new sqlite3.Database(dbConfig.getDBPath())
     if (newDB) {
         createSchemaSql().map((query) => {
-            console.log('creating .. ', query)
+            console.log('creating schema.. ', query)
             currentDB.exec(query, (err, data) => {
                 if (err) console.log('reject ::: ', err)
             })

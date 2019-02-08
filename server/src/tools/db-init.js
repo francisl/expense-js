@@ -6,7 +6,7 @@ const configFilename = config.getDbFilename();
 
 function createNewDB(){
 	db.createSchemaSql().map((query) => {
-		console.log('creating .. ', query);
+		console.log('creating new database.. ', query);
 		modelUtils.execSql(query, 'exec');
 	});
 }
