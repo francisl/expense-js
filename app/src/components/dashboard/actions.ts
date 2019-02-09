@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch';
+import * as fetch from 'isomorphic-fetch';
 
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
 export const PENDING_CATEGORIES = 'PENDING_CATEGORIES';
@@ -15,7 +15,7 @@ export function fetchCategories(dispatch) {
     fetch("/api/category/")
         .then((response) =>{
             if (response.status >= 400) {
-                throw new Error('catgories fetch failed, ', r, e);
+                throw new Error(`catgories fetch failed ${response}`);
             }
             return response.json();        
         }).then((data) => {
@@ -26,6 +26,7 @@ export function fetchCategories(dispatch) {
 
 export const RECEIVE_STORES = 'RECEIVE_STORES';
 function receiveStores(stores) {
+    debugger;
     return {
         type: RECEIVE_STORES,
         stores
@@ -35,9 +36,11 @@ function receiveStores(stores) {
 export function fetchStores(dispatch) {
     fetch("/api/stores/")
     .then((response) =>{
+        debugger
         if (response.status >= 400) {
-            throw new Error('stores fetch failed, ', r, e);
+            throw new Error(`stores fetch failed ${response}`);
         }
+        debugger;
         return response.json();        
     }).then((data) => {
         dispatch(receiveStores(data.stores));
@@ -58,7 +61,7 @@ export function fetchSpenders(dispatch) {
     fetch("/api/spenders/")
     .then((response) =>{
         if (response.status >= 400) {
-            throw new Error('spenders fetch failed, ', r, e);
+            throw new Error(`spenders fetch failed ${response}`);
         }
         return response.json();        
     }).then((data) => {

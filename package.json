@@ -6,7 +6,7 @@
   "main": "server/src/index.js",
   "scripts": {
     "start:dev": "npm run build && cd server && npm run start:default",
-    "start": "npm run build && cd server && npm run start",
+    "start": "cd server && npm run start",
     "start:watch": "cd app && npm run build && cd ../server/ && npm run start:watch",
     "build": "cd app && npm run build && cd ../server && npm run build",
     "test": "cd server && NODE_ENV=test mocha -d --compilers js:babel-register",

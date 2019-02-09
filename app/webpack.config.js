@@ -14,14 +14,17 @@ module.exports = {
 	output: {
 		path: path.join(__dirname, 'dist'),
 		filename: 'bundle.js',
-		publicPath: '/static/'
+		publicPath: '/app/'
 	},
 	devtool: 'source-map',
+	mode: 'development',
 	resolve: {
-		extensions: ['.webpack.js', '.web.js','.js', '.jsx']
+		extensions: ['.webpack.js', '.ts', '.tsx', '.js', '.jsx']
 	},
 	module: {
 		rules: [
+			{ test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+			{ enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
 			{	test: /\.jsx?$/,
 				exclude: /(node_modules)/,
 				loader: ['babel-loader'],

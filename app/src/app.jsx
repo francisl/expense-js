@@ -1,5 +1,3 @@
-// import $ from 'jquery';
-// import '../styles/foundation/app.scss';
 import '../styles/main.css';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
