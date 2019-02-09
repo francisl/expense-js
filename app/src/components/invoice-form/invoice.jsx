@@ -1,7 +1,8 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Classes, InputGroup } from '@blueprintjs/core';
+import { Classes, InputGroup } from '@blueprintjs/core';
+import Button from '@material-ui/core/Button';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 // import Layout from 'baer/dist/layouts/layout';
@@ -30,15 +31,15 @@ class InvoiceForm extends Component {
     }
 
     getSelectedSpenders() {
-        return _.filter(this.props.spenders, (s) => (s.selected === true));
+        return this.props.spenders.filter((s) => (s.selected === true));
     }
 
     toggleSelection(spenderId) {
-      const spender = _.find(this.props.spenders, (s) => {
+      const spender = this.props.spenders.filter((s) => {
         return s.id === parseInt(spenderId);
       });
-      if (spender) {
-        spender.selected = !spender.selected;
+      if (spender && spender.length > 0) {
+        spender[0].selected = !spender[0].selected;
       }
     }
 
@@ -124,7 +125,7 @@ class InvoiceForm extends Component {
                   spenders={this.props.spenders}
                   onUpdate={this.updateSpenders}/>
 
-                <Button className="large-input" onClick={(e) => this.addInvoice(e)} text="Save" />
+                <Button className="large-input" onClick={(e) => this.addInvoice(e)} variant="contained" color="primary">Save</Button>
 
           </div>
         );

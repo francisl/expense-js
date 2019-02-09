@@ -21,3 +21,10 @@ You can rename and remove the .git/ directory to make it a new project
     npm run build
 
 [Open in your browser](http://localhost:3000)
+
+
+## Logs
+
+## TS + Material-UI migration
+
+before migration size: 2.58 dev | 603k prod

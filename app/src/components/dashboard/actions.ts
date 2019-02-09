@@ -26,7 +26,6 @@ export function fetchCategories(dispatch) {
 
 export const RECEIVE_STORES = 'RECEIVE_STORES';
 function receiveStores(stores) {
-    debugger;
     return {
         type: RECEIVE_STORES,
         stores
@@ -36,12 +35,10 @@ function receiveStores(stores) {
 export function fetchStores(dispatch) {
     fetch("/api/stores/")
     .then((response) =>{
-        debugger
         if (response.status >= 400) {
             throw new Error(`stores fetch failed ${response}`);
         }
-        debugger;
-        return response.json();        
+         return response.json();        
     }).then((data) => {
         dispatch(receiveStores(data.stores));
     })
