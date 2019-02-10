@@ -2,11 +2,13 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Classes, InputGroup } from '@blueprintjs/core';
+
 import Button from '@material-ui/core/Button';
-import DayPicker from 'react-day-picker';
-import 'react-day-picker/lib/style.css';
+import FormGroup from '@material-ui/core/FormGroup';
+import TextField from '@material-ui/core/TextField';
 // import Layout from 'baer/dist/layouts/layout';
 
+import { today } from '../../utils/date';
 import { addInvoice, REQUEST_STATUS } from './actions';
 import { DataList } from '../semantic-react/datalist';
 import SpendersList from './spenders-list.jsx';
@@ -53,7 +55,7 @@ class InvoiceForm extends Component {
             form: {
                 category: '',
                 store: '',
-                date: this.getToday(),
+                date: today(),
                 amount: '',
             },
             submited: false
@@ -67,19 +69,12 @@ class InvoiceForm extends Component {
         }).map(s => (s.id));
 
         this.setState({ ...this.state, submited: true });
-        this.props.actions.addInvoice(this.state.form);
-    }
-
-    getToday(){
-        const date = new Date;
-        const currMonth = date.getMonth()
-        const month = currMonth+1; // singleDigits[currMonth] || currMonth+1;
-        const day = date.getDate();
-        return date.getFullYear() + '-' + month + '-' + day;
+        console.info('submiting : ', this.state.form)
+        // this.props.actions.addInvoice(this.state.form);
     }
 
     onDateClicked(d) {
-      this.state.form.date = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+      this.state.form.date = d.target.value
       this.setState(this.state);
     }
 
@@ -108,7 +103,8 @@ class InvoiceForm extends Component {
         console.log('props spenders : ', this.props.spenders);
         console.log('spenders : ', this.state.form.spenders);
         return (
-            <div layout="{width: '236px', padding:'2px'}" vertical center>
+            <div layout="{width: '236px', padding:'2px'}">
+            {/* vertical center> */}
                 <StatusMessage request={this.props.form.request}/>
 
                 <InputGroup className={`${Classes.LARGE} large-input`} required placeholder="Categories" list="CategoryList" value={this.state.form.category} onChange={this.setCategory} autoFocus={true} />
@@ -117,7 +113,20 @@ class InvoiceForm extends Component {
                 <InputGroup className={`${Classes.LARGE} large-input`} required placeholder="Store" list="StoreList" value={this.state.form.store} onChange={this.setStore}/>
                 <DataList list={this.props.stores} fieldId="StoreList" listKey="name" />
 
-                <DayPicker value={this.state.form.date} onDayClick={this.onDateClicked} selectedDays={new Date()}/>
+                <FormGroup row>
+                  <TextField
+                    id="date"
+                    label="Date"
+                    type="date"
+                    defaultValue={today()}
+                    onChange={this.onDateClicked2}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </FormGroup>
+                
+
                 <InputGroup className={`${Classes.LARGE} large-input`} required type="text" placeholder="Amount" value={this.state.form.amount} onChange={this.setAmount.bind(this)}/>
 
                 <SpendersList

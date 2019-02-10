@@ -10,7 +10,7 @@ export default (props) => {
       <FormControlLabel
         control={<Checkbox
           onChange={onUpdate}
-          value={s.id}
+          value="{s.id}"
           checked={s.selected}
           color="primary"
         />}
