@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "Simple Expense Tracker",
   "repository": "https://github.com/francisl/expense-and-family",
-  "main": "server/src/index.js",
+  "maind": "server/src/index.js",
   "scripts": {
-    "start:dev": "npm run build && cd server && npm run start:default",
+    "start:dev": "npm run build && cd server && npm run start:dev",
     "start": "npm run build && cd server && npm run start",
     "start:watch": "cd app && npm run build && cd ../server/ && npm run start:watch",
     "build": "cd app && npm run build && cd ../server && npm run build",

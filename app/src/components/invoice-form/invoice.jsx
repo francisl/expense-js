@@ -112,7 +112,15 @@ class InvoiceForm extends Component {
             <Layout layout="{width: '236px', padding:'2px'}" vertical center>
                 <StatusMessage request={this.props.form.request}/>
 
-                <InputGroup className={`${Classes.LARGE} large-input`} required placeholder="Categories" list="CategoryList" value={this.state.form.category} onChange={this.setCategory} autoFocus={true} />
+                <InputGroup 
+                  className={`${Classes.LARGE} large-input`} 
+                  required 
+                  placeholder="Categories" 
+                  list="CategoryList" 
+                  value={this.state.form.category} 
+                  onChange={this.setCategory} 
+                  autoFocus={true} 
+                />
                 <DataList list={this.props.categories} fieldId="CategoryList" listKey="name" />
 
                 <InputGroup className={`${Classes.LARGE} large-input`} required placeholder="Store" list="StoreList" value={this.state.form.store} onChange={this.setStore}/>
