@@ -19,13 +19,6 @@ class InvoiceDashboard extends Component {
                 stores={this.props.stores}
                 categories={this.props.categories}
                 spenders={this.props.spenders} />
-            <Stack vertical align="stretch">
-                <ul>
-                    <li><a href="/report">Report</a></li>
-                    <li><a href="/stores">Stores</a></li>
-                    <li><a href="/categories">Categories</a></li>
-                </ul>
-            </Stack>
         </Stack>);
     }
 }

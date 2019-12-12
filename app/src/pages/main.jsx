@@ -4,17 +4,18 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
+import Links from '../components/backend/links'
+
 initializeIcons(/* optional base url */);
 
 const navigationItemsPages = {
-   Dashboard:  <InvoiceDashboard />, 
-   Reports:  <InvoiceDashboard />,
-   Categories:  <InvoiceDashboard />,
-   Stores:  <InvoiceDashboard />,
+   Dashboard: { label: 'Dashboard', component: <InvoiceDashboard /> },
+   Import: { label: 'Import', component: <InvoiceDashboard /> },
+   BackendLinks: { label: 'Backend Links', component: <Links /> },
 };
 
 const navigationActionsPages = {
-   Settings: <div>Settings</div>
+   Settings: { label: 'Settings', component: <div>Settings</div> }, 
 }
 
 const navigationPages = {
@@ -56,8 +57,8 @@ const MainPage = () => {
             headersOnly={true}
             getTabId={_getTabId}
          >
-            {Object.keys(navigationItemsPages).map(name => (
-               <PivotItem key={`pivotItemKey_${name}`} headerText={name} itemKey={name} />   
+            {Object.keys(navigationItemsPages).map(key => (
+               <PivotItem key={`pivotItemKey_${key}`} headerText={navigationItemsPages[key].label} itemKey={key} />   
             ))}
          </Pivot>
          {
@@ -67,7 +68,7 @@ const MainPage = () => {
          }
          
       </div>
-     {navigationPages[currentNavItem]}
+     {navigationPages[currentNavItem].component}
    </Fragment>;
 };
 
