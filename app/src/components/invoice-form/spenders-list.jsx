@@ -1,15 +1,17 @@
 import React from 'react';
-import { Checkbox } from '@blueprintjs/core';
+import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 export default (props) => {
   const spenders = props.spenders.map((s) => (
     <Checkbox
-      key={s.id}
       onChange={props.onUpdate}
-      name="spenders"
-      value={s.id}
       label={s.name}
       checked={s.selected}
+      id={s.id}
     />));
-  return (<div className="large-input">{spenders}</div>);
+  return ( 
+      <Stack tokens={{ childrenGap: 10 }}>
+          {spenders}
+      </Stack>);
 }

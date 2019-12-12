@@ -1,17 +1,38 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { each } from 'lodash';
-import { Button, Classes, InputGroup, Position, Toaster } from '@blueprintjs/core';
-import { DatePicker } from '@blueprintjs/datetime';
-import DayPicker from 'react-day-picker';
-import 'react-day-picker/lib/style.css';
-import { Layout } from 'baer';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { PrimaryButton } from 'office-ui-fabric-react';
+import { ComboBox } from 'office-ui-fabric-react/lib/index';
+import { DatePicker, DayOfWeek } from 'office-ui-fabric-react';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 
 import { addInvoice, REQUEST_STATUS } from './actions';
-import { DataList } from '../semantic-react/datalist';
 import SpendersList from './spenders-list.jsx';
 import StatusMessage from './status-message';
+
+const DayPickerStrings = {
+  months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+  shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+  shortDays: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+  goToToday: 'Go to today',
+  prevMonthAriaLabel: 'Go to previous month',
+  nextMonthAriaLabel: 'Go to next month',
+  prevYearAriaLabel: 'Go to previous year',
+  nextYearAriaLabel: 'Go to next year',
+  closeButtonAriaLabel: 'Close date picker',
+  isRequiredErrorMessage: 'Field is required.',
+  invalidInputErrorMessage: 'Invalid date format.'
+};
+
+const controlClass = mergeStyleSets({
+  control: {
+    margin: '0 0 15px 0',
+    maxWidth: '300px'
+  }
+})
 
 class InvoiceForm extends Component {
     constructor(props, context) {
@@ -44,8 +65,8 @@ class InvoiceForm extends Component {
       }
     }
 
-    updateSpenders(e) {
-      this.toggleSelection(e.target.value);
+    updateSpenders(e, checked) {
+      this.toggleSelection(e.target.id);
       this.setState({form: {...this.state.form, spenders: this.getSelectedSpenders()}});
     }
 
@@ -54,7 +75,7 @@ class InvoiceForm extends Component {
             form: {
                 category: '',
                 store: '',
-                date: this.getToday(),
+                date: new Date(),
                 amount: '',
             },
             submited: false
@@ -71,21 +92,12 @@ class InvoiceForm extends Component {
         this.props.actions.addInvoice(this.state.form);
     }
 
-    getToday(){
-        const date = new Date;
-        const currMonth = date.getMonth()
-        const month = currMonth+1; // singleDigits[currMonth] || currMonth+1;
-        const day = date.getDate();
-        return date.getFullYear() + '-' + month + '-' + day;
-    }
-
     onDateClicked(d) {
-      this.state.form.date = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+      this.state.form.date = d //`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
       this.setState(this.state);
     }
 
     setField(key, e) {
-      this.state.form[key] = e.target.value;
       this.state.form[key] = e.target.value;
       this.setState(this.state);
     }
@@ -105,38 +117,63 @@ class InvoiceForm extends Component {
     }
 
     render() {
+        const { form } = this.state
         this.resetFormWhenNeeded();
-        console.log('props spenders : ', this.props.spenders);
-        console.log('spenders : ', this.state.form.spenders);
         return (
-            <Layout layout="{width: '236px', padding:'2px'}" vertical center>
+          <Stack vertical tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
+            {/* <Layout layout="{width: '236px', padding:'2px'}" vertical center> */}
                 <StatusMessage request={this.props.form.request}/>
 
-                <InputGroup 
-                  className={`${Classes.LARGE} large-input`} 
-                  required 
-                  placeholder="Categories" 
-                  list="CategoryList" 
-                  value={this.state.form.category} 
-                  onChange={this.setCategory} 
-                  autoFocus={true} 
+                <ComboBox
+                  label="Store"
+                  placeholder=""
+                  allowFreeform
+                  autoComplete="on"
+                  onChange={this.setStore} 
+                  options={this.props.stores.map((e) => ({
+                    key: e.name, text: e.name
+                  }))}
+                  selectedKey={form.store}
                 />
-                <DataList list={this.props.categories} fieldId="CategoryList" listKey="name" />
 
-                <InputGroup className={`${Classes.LARGE} large-input`} required placeholder="Store" list="StoreList" value={this.state.form.store} onChange={this.setStore}/>
-                <DataList list={this.props.stores} fieldId="StoreList" listKey="name" />
+                <ComboBox
+                  label="Category"
+                  placeholder=""
+                  allowFreeform
+                  autoComplete="on"
+                  onChange={this.setCategory} 
+                  options={this.props.categories.map((cat) => ({
+                    key: cat.name, text: cat.name
+                  }))}
+                  selectedKey={form.category}
+                />
 
-                <DayPicker value={this.state.form.date} onDayClick={this.onDateClicked} selectedDays={new Date()}/>
-                <InputGroup className={`${Classes.LARGE} large-input`} required type="text" placeholder="Amount" value={this.state.form.amount} onChange={this.setAmount.bind(this)}/>
+                <DatePicker
+                  className={controlClass.control}
+                  firstDayOfWeek={DayOfWeek.Monday}
+                  strings={DayPickerStrings}
+                  label="Invoice date"
+                  ariaLabel="Invoice date"
+                  isRequired
+                  onSelectDate={this.onDateClicked}
+                  value={form.date}
+                />
+
+                <TextField
+                  label="Amout"
+                  placeholder="0.00" 
+                  value={this.state.form.amount} 
+                  onChange={this.setAmount.bind(this)}
+                />
 
                 <SpendersList
-                  className="large-input"
                   spenders={this.props.spenders}
                   onUpdate={this.updateSpenders}/>
 
-                <Button className="large-input" onClick={(e) => this.addInvoice(e)} text="Save" />
+                <PrimaryButton onClick={(e) => this.addInvoice(e)} text="Save" />
 
-          </Layout>
+          {/* </Layout> */}
+          </Stack>
         );
     }
 } 

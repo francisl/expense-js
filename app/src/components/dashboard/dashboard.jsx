@@ -1,12 +1,9 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import InvoiceForm from '../invoice-form/invoice.jsx';
+import InvoiceForm from '../invoice-form/invoice';
 import { fetchCategories, fetchStores, fetchSpenders } from './actions';
-import { Segment } from '../semantic-react/elements/segment';
-import { Layout } from 'baer';
-
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 class InvoiceDashboard extends Component {
     constructor(props, context) {
@@ -14,24 +11,22 @@ class InvoiceDashboard extends Component {
         this.props.actions.fetchCategories();
         this.props.actions.fetchStores();
         this.props.actions.fetchSpenders();
-        console.log('InvoiceDashboard Constructor : ', this.props);
     }
 
     render() {
-        return (
-            <Layout>
-                <InvoiceForm id="SideLayout"
-                    stores={this.props.stores}
-                    categories={this.props.categories}
-                    spenders={this.props.spenders} />
-               <Layout vertical stretch>
-                  <ul>
+        return (<Stack vertical tokens={{ childrenGap: 5 }}>
+            <InvoiceForm id="SideLayout"
+                stores={this.props.stores}
+                categories={this.props.categories}
+                spenders={this.props.spenders} />
+            <Stack vertical align="stretch">
+                <ul>
                     <li><a href="/report">Report</a></li>
                     <li><a href="/stores">Stores</a></li>
                     <li><a href="/categories">Categories</a></li>
-                  </ul>
-              </Layout>
-            </Layout>);
+                </ul>
+            </Stack>
+        </Stack>);
     }
 }
 
@@ -45,17 +40,16 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch) {
     return { actions: {
-                    fetchCategories: () => {
-                        dispatch(fetchCategories(dispatch));
-                    },
-                    fetchStores: () => {
-                        dispatch(fetchStores(dispatch));
-                    },
-                    fetchSpenders: () => {
-                        dispatch(fetchSpenders(dispatch));
-                    }
-                }
-            };
+        fetchCategories: () => {
+            dispatch(fetchCategories(dispatch));
+        },
+        fetchStores: () => {
+            dispatch(fetchStores(dispatch));
+        },
+        fetchSpenders: () => {
+            dispatch(fetchSpenders(dispatch));
+        }
+    }};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(InvoiceDashboard);

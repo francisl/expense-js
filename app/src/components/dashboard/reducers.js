@@ -9,8 +9,6 @@ export function categoriesReducers (state, action) {
     }
     switch (action.type) {
         case RECEIVE_CATEGORIES:
-            console.log('action state :::>>> ', state);
-            console.log('action categories :::>>> ', action.categories);
             return action.categories;
         default:
             return state;

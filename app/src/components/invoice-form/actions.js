@@ -33,6 +33,11 @@ function sentInvoice(response) {
 
 
 export function addInvoice(form) {
+    const currMonth = form.date.getMonth()
+    const month = currMonth+1; // singleDigits[currMonth] || currMonth+1;
+    const day = form.date.getDate();
+    const formatedDate = form.date.getFullYear() + '-' + month + '-' + day;
+
     return (dispatch, getState) => {
         fetch("/api/invoice/", {
             method: "POST",
@@ -40,8 +45,11 @@ export function addInvoice(form) {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
             }),
-            body: JSON.stringify(form)
+            body: JSON.stringify({
+                ...form,
+                date: formatedDate
             })
+        })
         .then((response) =>{
             if (response.status >= 400) {
                 dispatch(errorInvoice(status, error));
