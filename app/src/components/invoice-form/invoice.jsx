@@ -53,11 +53,11 @@ class InvoiceForm extends Component {
     }
 
     getSelectedSpenders() {
-        return _.filter(this.props.spenders, (s) => (s.selected === true));
+        return this.props.spenders.filter(s => (s.selected === true));
     }
 
     toggleSelection(spenderId) {
-      const spender = _.find(this.props.spenders, (s) => {
+      const spender = this.props.spenders.find(s => {
         return s.id === parseInt(spenderId);
       });
       if (spender) {

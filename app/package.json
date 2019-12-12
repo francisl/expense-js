@@ -21,7 +21,6 @@
   "dependencies": {
     "fetch": "^1.1.0",
     "isomorphic-fetch": "^2.2.1",
-    "lodash": "^4.17.15",
     "office-ui-fabric-react": "^7.71.0",
     "react": "^16.12.0",
     "react-addons-css-transition-group": "^15.6.2",
