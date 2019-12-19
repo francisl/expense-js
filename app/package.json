@@ -19,9 +19,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@material-ui/core": "^4.7.2",
-    "@material-ui/icons": "^4.5.1",
-    "@material-ui/lab": "^4.0.0-alpha.35",
+    "antd": "^3.26.3",
+    "babel-plugin-import": "^1.13.0",
     "fetch": "^1.1.0",
     "isomorphic-fetch": "^2.2.1",
     "react": "^16.12.0",

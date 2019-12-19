@@ -9,7 +9,8 @@
       	"transform-react-constant-elements",
         "transform-react-inline-elements",
 				"transform-object-rest-spread",
-      	"transform-runtime"
+        "transform-runtime",
+        ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }]
       ]
     }
   }

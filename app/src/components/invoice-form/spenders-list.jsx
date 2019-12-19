@@ -1,6 +1,7 @@
 import React from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import Container from '@material-ui/core/Container';
+import { Checkbox } from 'antd';
+import { Layout } from 'antd';
+const { Content } = Layout;
 
 export default (props) => {
   const spenders = props.spenders.map((s) => (
@@ -11,8 +12,10 @@ export default (props) => {
       checked={s.selected}
       id={s.id}
     />));
-  return ( 
-      <Container tokens={{ childrenGap: 10 }}>
-          {spenders}
-      </Container>);
+  return (
+    <Layout vertical tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
+        <Content>
+            {spenders}
+        </Content>
+    </Layout>);
 }

@@ -1,14 +1,16 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import Container from '@material-ui/core/Container';
+import { AutoComplete } from 'antd';
+import { DatePicker } from 'antd';
+import { InputNumber } from 'antd';
+import { Button } from 'antd';
+import { Layout } from 'antd';
+const { Content } = Layout;
 
 import { addInvoice, REQUEST_STATUS } from './actions';
 import SpendersList from './spenders-list.jsx';
-import StatusMessage from './status-message';
+
 
 const controlClass = mergeStyleSets({
   control: {
@@ -16,6 +18,8 @@ const controlClass = mergeStyleSets({
     maxWidth: '300px'
   }
 })
+
+const dateFormat = 'YYYY/MM/DD';
 
 class InvoiceForm extends Component {
     constructor(props, context) {
@@ -103,51 +107,37 @@ class InvoiceForm extends Component {
         const { form } = this.state
         this.resetFormWhenNeeded();
         return (
-          <Container vertical tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
+          <Layout vertical tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
+            <Content>
             {/* <Layout layout="{width: '236px', padding:'2px'}" vertical center> */}
-                <StatusMessage request={this.props.form.request}/>
 
-                <Autocomplete
-                    label="Store"
-                    placeholder=""
-                    allowFreeform
-                    autoComplete="on"
-                    onChange={this.setStore} 
-                    options={this.props.stores.map((e) => ({
+                <AutoComplete
+                    onSelect={this.setStore} 
+                    dataSource={this.props.stores.map((e) => ({
                         key: e.name, text: e.name
                     }))}
-                    selectedKey={form.store}
+                    value={form.store}
                 />
 
-                <Autocomplete
-                    label="Category"
-                    placeholder=""
-                    allowFreeform
-                    autoComplete="on"
-                    onChange={this.setCategory} 
-                    options={this.props.categories.map((cat) => ({
+                <AutoComplete
+                    onSelect={this.setCategory} 
+                    dataSource={this.props.categories.map((cat) => ({
                         key: cat.name, text: cat.name
                     }))}
-                    selectedKey={form.category}
+                    value={form.category}
                 />
 
-                <KeyboardDatePicker
-                    disableToolbar
-                    variant="inline"
-                    format="MM/dd/yyyy"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="Date picker inline"
-                    value={form.date}
+                <DatePicker 
+                    defaultValue={moment(form.date, dateFormat)} 
+                    format={dateFormat} 
                     onChange={this.onDateClicke}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change date',
-                    }}
                 />
 
-                <TextField
+                <InputNumber
                   label="Amout"
-                  placeholder="0.00" 
+                  defaultValue="0.00"
+                  formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  parser={value => value.replace(/\$\s?|(,*)/g, '')}
                   value={this.state.form.amount} 
                   onChange={this.setAmount.bind(this)}
                 />
@@ -158,8 +148,9 @@ class InvoiceForm extends Component {
 
                 <Button onClick={(e) => this.addInvoice(e)} text="Save" />
 
+            </Content>
           {/* </Layout> */}
-          </Container>
+          </Layout>
         );
     }
 } 
