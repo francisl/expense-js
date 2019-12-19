@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import InvoiceForm from '../invoice-form/invoice';
 import { fetchCategories, fetchStores, fetchSpenders } from './actions';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import Container from '@material-ui/core/Container';
 
 class InvoiceDashboard extends Component {
     constructor(props, context) {
@@ -14,12 +14,12 @@ class InvoiceDashboard extends Component {
     }
 
     render() {
-        return (<Stack vertical tokens={{ childrenGap: 5 }}>
+        return (<Container vertical tokens={{ childrenGap: 5 }}>
             <InvoiceForm id="SideLayout"
                 stores={this.props.stores}
                 categories={this.props.categories}
                 spenders={this.props.spenders} />
-        </Stack>);
+        </Container>);
     }
 }
 

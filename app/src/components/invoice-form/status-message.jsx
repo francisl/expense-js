@@ -1,7 +1,37 @@
 import React from 'react';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
-
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
 import { REQUEST_STATUS } from './actions';
+
+const variantIcon = {
+  success: CheckCircleIcon,
+  warning: WarningIcon,
+  error: ErrorIcon,
+  info: InfoIcon,
+};
+
+const Message = (props) => {
+  const Icon = variantIcon['success'];
+  return <SnackbarContent
+      aria-describedby="client-snackbar"
+      message={
+        <span id="client-snackbar">
+          <Icon />
+          {props.message}
+        </span>
+      }
+      action={[
+        <IconButton key="close" aria-label="close" color="inherit" onClick={props.onClose}>
+          <CloseIcon className={classes.icon} />
+        </IconButton>,
+      ]}
+      {...other}
+    />
+}
 
 export default (props) => {
   let toast;
@@ -12,36 +42,23 @@ export default (props) => {
 
   switch(props.request.status){
       case REQUEST_STATUS.SUCCESS:
-          return <MessageBar 
-            messageBarType={MessageBarType.success} 
-            isMultiline={false} 
-            onDismiss={p.resetChoice} 
-            dismissButtonAriaLabel="Close"
-            ref={toastR} 
-          >
-            Invoice created succesfully
-          </MessageBar>
-          
+          return <Message 
+              label="Close" 
+              onClose={presetChoice} 
+              message="Invoice created succesfully" 
+          />
       case REQUEST_STATUS.PENDING:
-          return <MessageBar 
-              messageBarType={MessageBarType.error} 
-              isMultiline={false} 
-              onDismiss={p.resetChoice} 
-              dismissButtonAriaLabel="Close"
-              ref={toastR} 
-          >
-              Pending...
-        </MessageBar>
+        return <Message 
+            label="Close" 
+            onClose={presetChoice} 
+            message="Pending..." 
+        />
       case REQUEST_STATUS.ERROR:
-          return <MessageBar 
-              messageBarType={MessageBarType.error} 
-              isMultiline={false} 
-              onDismiss={p.resetChoice} 
-              dismissButtonAriaLabel="Close"
-              ref={toastR} 
-          >
-              Error Creating Invoice: {props.request.error.status} | {props.request.error.error}
-          </MessageBar>
+        return <Message 
+            label="Close" 
+            onClose={presetChoice} 
+            message= "Error Creating Invoice: {props.request.error.status} | {props.request.error.error}"
+        />
   }
 
   if (toast2) {

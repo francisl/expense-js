@@ -1,12 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import InvoiceDashboard from '../components/dashboard/dashboard';
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import Links from '../components/backend/links'
-
-initializeIcons(/* optional base url */);
 
 const navigationItemsPages = {
    Dashboard: { label: 'Dashboard', component: <InvoiceDashboard /> },
@@ -50,7 +45,7 @@ const MainPage = () => {
             alignItems: 'center'
          }}
       >
-         <Pivot
+         {/* <Pivot
             style={{ flexGrow: 1 }}
             selectedKey={Object.keys(navigationItemsPages).indexOf(currentNavItem) >= 0 ? currentNavItem : null}
             onLinkClick={({ props }) => { setCurrentNavItem(props.itemKey)}}
@@ -63,9 +58,9 @@ const MainPage = () => {
          </Pivot>
          {
             currentNavItem === 'Settings' ?
-               <PrimaryButton {...actionButtonProps} /> :
-               <DefaultButton {...actionButtonProps} />
-         }
+            <Button variant="contained" color="primary" {...actionButtonProps} /> :
+            <Button variant="contained"> {...actionButtonProps} />
+         } */}
          
       </div>
      {navigationPages[currentNavItem].component}

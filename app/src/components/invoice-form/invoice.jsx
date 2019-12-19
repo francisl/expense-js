@@ -1,31 +1,14 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PrimaryButton } from 'office-ui-fabric-react';
-import { ComboBox } from 'office-ui-fabric-react/lib/index';
-import { DatePicker, DayOfWeek } from 'office-ui-fabric-react';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import Container from '@material-ui/core/Container';
 
 import { addInvoice, REQUEST_STATUS } from './actions';
 import SpendersList from './spenders-list.jsx';
 import StatusMessage from './status-message';
-
-const DayPickerStrings = {
-  months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-  shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-  days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-  shortDays: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-  goToToday: 'Go to today',
-  prevMonthAriaLabel: 'Go to previous month',
-  nextMonthAriaLabel: 'Go to next month',
-  prevYearAriaLabel: 'Go to previous year',
-  nextYearAriaLabel: 'Go to next year',
-  closeButtonAriaLabel: 'Close date picker',
-  isRequiredErrorMessage: 'Field is required.',
-  invalidInputErrorMessage: 'Invalid date format.'
-};
 
 const controlClass = mergeStyleSets({
   control: {
@@ -120,43 +103,46 @@ class InvoiceForm extends Component {
         const { form } = this.state
         this.resetFormWhenNeeded();
         return (
-          <Stack vertical tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
+          <Container vertical tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
             {/* <Layout layout="{width: '236px', padding:'2px'}" vertical center> */}
                 <StatusMessage request={this.props.form.request}/>
 
-                <ComboBox
-                  label="Store"
-                  placeholder=""
-                  allowFreeform
-                  autoComplete="on"
-                  onChange={this.setStore} 
-                  options={this.props.stores.map((e) => ({
-                    key: e.name, text: e.name
-                  }))}
-                  selectedKey={form.store}
+                <Autocomplete
+                    label="Store"
+                    placeholder=""
+                    allowFreeform
+                    autoComplete="on"
+                    onChange={this.setStore} 
+                    options={this.props.stores.map((e) => ({
+                        key: e.name, text: e.name
+                    }))}
+                    selectedKey={form.store}
                 />
 
-                <ComboBox
-                  label="Category"
-                  placeholder=""
-                  allowFreeform
-                  autoComplete="on"
-                  onChange={this.setCategory} 
-                  options={this.props.categories.map((cat) => ({
-                    key: cat.name, text: cat.name
-                  }))}
-                  selectedKey={form.category}
+                <Autocomplete
+                    label="Category"
+                    placeholder=""
+                    allowFreeform
+                    autoComplete="on"
+                    onChange={this.setCategory} 
+                    options={this.props.categories.map((cat) => ({
+                        key: cat.name, text: cat.name
+                    }))}
+                    selectedKey={form.category}
                 />
 
-                <DatePicker
-                  className={controlClass.control}
-                  firstDayOfWeek={DayOfWeek.Monday}
-                  strings={DayPickerStrings}
-                  label="Invoice date"
-                  ariaLabel="Invoice date"
-                  isRequired
-                  onSelectDate={this.onDateClicked}
-                  value={form.date}
+                <KeyboardDatePicker
+                    disableToolbar
+                    variant="inline"
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="date-picker-inline"
+                    label="Date picker inline"
+                    value={form.date}
+                    onChange={this.onDateClicke}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change date',
+                    }}
                 />
 
                 <TextField
@@ -170,10 +156,10 @@ class InvoiceForm extends Component {
                   spenders={this.props.spenders}
                   onUpdate={this.updateSpenders}/>
 
-                <PrimaryButton onClick={(e) => this.addInvoice(e)} text="Save" />
+                <Button onClick={(e) => this.addInvoice(e)} text="Save" />
 
           {/* </Layout> */}
-          </Stack>
+          </Container>
         );
     }
 } 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import Checkbox from '@material-ui/core/Checkbox';
+import Container from '@material-ui/core/Container';
 
 export default (props) => {
   const spenders = props.spenders.map((s) => (
@@ -12,7 +12,7 @@ export default (props) => {
       id={s.id}
     />));
   return ( 
-      <Stack tokens={{ childrenGap: 10 }}>
+      <Container tokens={{ childrenGap: 10 }}>
           {spenders}
-      </Stack>);
+      </Container>);
 }

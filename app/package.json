@@ -19,9 +19,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@material-ui/core": "^4.7.2",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.35",
     "fetch": "^1.1.0",
     "isomorphic-fetch": "^2.2.1",
-    "office-ui-fabric-react": "^7.71.0",
     "react": "^16.12.0",
     "react-addons-css-transition-group": "^15.6.2",
     "react-day-picker": "^7.4.0",
