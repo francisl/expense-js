@@ -5,17 +5,23 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Container from '@material-ui/core/Container';
+import MomentUtils from '@date-io/moment';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+  } from '@material-ui/pickers';
 
 import { addInvoice, REQUEST_STATUS } from './actions';
 import SpendersList from './spenders-list.jsx';
-import StatusMessage from './status-message';
 
-const controlClass = mergeStyleSets({
-  control: {
-    margin: '0 0 15px 0',
-    maxWidth: '300px'
-  }
-})
+// import StatusMessage from './status-message';
+
+// const controlClass = mergeStyleSets({
+//   control: {
+//     margin: '0 0 15px 0',
+//     maxWidth: '300px'
+//   }
+// })
 
 class InvoiceForm extends Component {
     constructor(props, context) {
@@ -103,47 +109,49 @@ class InvoiceForm extends Component {
         const { form } = this.state
         this.resetFormWhenNeeded();
         return (
-          <Container vertical tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
+          <Container tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
             {/* <Layout layout="{width: '236px', padding:'2px'}" vertical center> */}
-                <StatusMessage request={this.props.form.request}/>
+                {/* <StatusMessage request={this.props.form.request}/> */}
 
                 <Autocomplete
                     label="Store"
                     placeholder=""
-                    allowFreeform
-                    autoComplete="on"
                     onChange={this.setStore} 
-                    options={this.props.stores.map((e) => ({
-                        key: e.name, text: e.name
-                    }))}
-                    selectedKey={form.store}
+                    // options={this.props.stores.map((e) => ({
+                    //     key: e.name, text: e.name
+                    // }))}
+                    renderInput={params => (
+                      <TextField {...params} label="Store" variant="outlined" fullWidth />
+                    )}
                 />
 
                 <Autocomplete
                     label="Category"
                     placeholder=""
-                    allowFreeform
-                    autoComplete="on"
                     onChange={this.setCategory} 
-                    options={this.props.categories.map((cat) => ({
-                        key: cat.name, text: cat.name
-                    }))}
-                    selectedKey={form.category}
+                    // options={this.props.categories.map((cat) => ({
+                    //     key: cat.name, text: cat.name
+                    // }))}
+                    renderInput={params => (
+                      <TextField {...params} label="Category" variant="outlined" fullWidth />
+                    )}
                 />
 
-                <KeyboardDatePicker
-                    disableToolbar
-                    variant="inline"
-                    format="MM/dd/yyyy"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="Date picker inline"
-                    value={form.date}
-                    onChange={this.onDateClicke}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change date',
-                    }}
-                />
+                <MuiPickersUtilsProvider utils={MomentUtils}>
+                  <KeyboardDatePicker
+                      disableToolbar
+                      variant="inline"
+                      format="MM/dd/yyyy"
+                      margin="normal"
+                      id="date-picker-inline"
+                      label="Date picker inline"
+                      value={form.date}
+                      onChange={this.onDateClicke}
+                      KeyboardButtonProps={{
+                        'aria-label': 'change date',
+                      }}
+                  />
+                </MuiPickersUtilsProvider>
 
                 <TextField
                   label="Amout"
@@ -156,7 +164,7 @@ class InvoiceForm extends Component {
                   spenders={this.props.spenders}
                   onUpdate={this.updateSpenders}/>
 
-                <Button onClick={(e) => this.addInvoice(e)} text="Save" />
+                <Button onClick={(e) => this.addInvoice(e)}>Save</Button>
 
           {/* </Layout> */}
           </Container>

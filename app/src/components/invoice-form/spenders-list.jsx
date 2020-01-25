@@ -9,7 +9,7 @@ export default (props) => {
       onChange={props.onUpdate}
       label={s.name}
       checked={s.selected}
-      id={s.id}
+      id={`${s.id}`}
     />));
   return ( 
       <Container tokens={{ childrenGap: 10 }}>

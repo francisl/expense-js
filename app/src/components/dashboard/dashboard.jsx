@@ -14,7 +14,7 @@ class InvoiceDashboard extends Component {
     }
 
     render() {
-        return (<Container vertical tokens={{ childrenGap: 5 }}>
+        return (<Container tokens={{ childrenGap: 5 }}>
             <InvoiceForm id="SideLayout"
                 stores={this.props.stores}
                 categories={this.props.categories}
