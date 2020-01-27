@@ -1,16 +1,22 @@
 import React from 'react';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
 
 export default (props) => {
   const spenders = props.spenders.map((s) => (
-    <Checkbox
-      key={s.id}
-      onChange={props.onUpdate}
+    <FormControlLabel
+      control={
+        <Checkbox
+          key={s.id}
+          onChange={props.onUpdate}
+          checked={s.selected}
+          id={`${s.id}`}
+        />
+      }
       label={s.name}
-      checked={s.selected}
-      id={`${s.id}`}
-    />));
+    />
+    ));
   return ( 
       <Container tokens={{ childrenGap: 10 }}>
           {spenders}

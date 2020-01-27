@@ -16,7 +16,7 @@ module.exports = {
 		filename: 'bundle.js',
 		publicPath: '/dist/'
 	},
-	devtool: 'source-map',
+	devtool: 'cheap-module-source-map',
 	resolve: {
 		extensions: ['.webpack.js', '.web.js','.js', '.jsx']
 	},

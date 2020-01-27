@@ -14,15 +14,6 @@ import {
 import { addInvoice, REQUEST_STATUS } from './actions';
 import SpendersList from './spenders-list.jsx';
 
-// import StatusMessage from './status-message';
-
-// const controlClass = mergeStyleSets({
-//   control: {
-//     margin: '0 0 15px 0',
-//     maxWidth: '300px'
-//   }
-// })
-
 class InvoiceForm extends Component {
     constructor(props, context) {
         super(props, context);
@@ -86,8 +77,9 @@ class InvoiceForm extends Component {
       this.setState(this.state);
     }
 
-    setField(key, e) {
-      this.state.form[key] = e.target.value;
+    setField(key, e, v) {
+      const value = e.target.value || v.key;
+      this.state.form[key] = value;
       this.setState(this.state);
     }
 
@@ -110,16 +102,14 @@ class InvoiceForm extends Component {
         this.resetFormWhenNeeded();
         return (
           <Container tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
-            {/* <Layout layout="{width: '236px', padding:'2px'}" vertical center> */}
-                {/* <StatusMessage request={this.props.form.request}/> */}
-
                 <Autocomplete
                     label="Store"
                     placeholder=""
                     onChange={this.setStore} 
-                    // options={this.props.stores.map((e) => ({
-                    //     key: e.name, text: e.name
-                    // }))}
+                    options={this.props.stores.map((e) => ({
+                        key: e.name, text: e.name
+                    }))}
+                    getOptionLabel={option => option.text}
                     renderInput={params => (
                       <TextField {...params} label="Store" variant="outlined" fullWidth />
                     )}
@@ -129,9 +119,10 @@ class InvoiceForm extends Component {
                     label="Category"
                     placeholder=""
                     onChange={this.setCategory} 
-                    // options={this.props.categories.map((cat) => ({
-                    //     key: cat.name, text: cat.name
-                    // }))}
+                    options={this.props.categories.map((cat) => ({
+                        key: cat.name, text: cat.name
+                    }))}
+                    getOptionLabel={option => option.text}
                     renderInput={params => (
                       <TextField {...params} label="Category" variant="outlined" fullWidth />
                     )}
@@ -164,7 +155,7 @@ class InvoiceForm extends Component {
                   spenders={this.props.spenders}
                   onUpdate={this.updateSpenders}/>
 
-                <Button onClick={(e) => this.addInvoice(e)}>Save</Button>
+                <Button onClick={(e) => this.addInvoice(e)} variant="contained" color="primary" >Save</Button>
 
           {/* </Layout> */}
           </Container>
