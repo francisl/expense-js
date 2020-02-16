@@ -50,6 +50,7 @@ module.exports = {
 			title: 'My Expense',
 			cache: true,
 			template: 'src/index.html'
-		})
+		}),
+		new BundleAnalyzerPlugin()
 	]
 };
