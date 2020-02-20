@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import store from '../../stores/store';
 
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
 export const PENDING_CATEGORIES = 'PENDING_CATEGORIES';
@@ -8,7 +9,9 @@ function receiveCategories(categories) {
     }
     return {
         type: RECEIVE_CATEGORIES,
-        categories
+        categories: categories.filter(c => {
+            return c.name !== ""
+        })
     };
 }
 export function fetchCategories(dispatch) {
@@ -19,6 +22,7 @@ export function fetchCategories(dispatch) {
             }
             return response.json();        
         }).then((data) => {
+            console.log('got data : ', data.categories);
             dispatch(receiveCategories(data.categories));
         })
     return {type: PENDING_CATEGORIES, categories: []};
@@ -28,7 +32,7 @@ export const RECEIVE_STORES = 'RECEIVE_STORES';
 function receiveStores(stores) {
     return {
         type: RECEIVE_STORES,
-        stores
+        stores : stores.filter(s => s.name !== "")
     };
 }
 

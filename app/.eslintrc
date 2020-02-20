@@ -9,7 +9,7 @@
       "import"
     ],
     "rules": {
-      "indent": ["error", 4],
+      "indent": ["error", 2],
       "no-tabs": "warn",
       "comma-dangle": ["error", "never"],
       "no-shadow": "off",
@@ -31,14 +31,6 @@
       "react": {
         "version": "detect"
       }
-      // "import/resolver": {
-      //   "node": {
-      //     "extensions": [
-      //       ".js",
-      //       ".jsx"
-      //     ]
-      //   }
-      // }
     },
     "env": {
       "browser": true

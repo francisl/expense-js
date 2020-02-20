@@ -6,7 +6,7 @@ import { invoiceReducer } from '../components/invoice-form/reducers';
 import { categoriesReducers, storesReducers, spendersReducers } from '../components/dashboard/reducers';
 
 const composeStore = compose(
-    applyMiddleware(thunkMiddleware),
+  applyMiddleware(thunkMiddleware),
 )(createStore);
 
 let reducers = combineReducers({

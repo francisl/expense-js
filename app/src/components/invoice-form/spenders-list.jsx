@@ -1,6 +1,6 @@
 import React from 'react';
-import { Checkbox } from 'antd';
-import { Layout } from 'antd';
+import { Checkbox, Layout } from 'antd';
+
 const { Content } = Layout;
 
 export default (props) => {
@@ -13,9 +13,10 @@ export default (props) => {
       id={s.id}
     />));
   return (
-    <Layout vertical tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
-        <Content>
-            {spenders}
-        </Content>
+    <Layout tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
+      <Content>
+        {spenders}
+      </Content>
     </Layout>);
 }
+    
