@@ -20,13 +20,22 @@ module.exports = {
   },
   devtool: 'source-map',
   resolve: {
-    extensions: ['.webpack.js', '.web.js','.js', '.jsx']
+    extensions: ['.webpack.js', '.web.js','.js', '.jsx'],
+    alias: {
+      "@ant-design/icons/lib/dist$": path.resolve(__dirname, "./src/icons.js")
+    }
   },
   module: {
     rules: [
       {	test: /\.jsx?$/,
         exclude: /(node_modules)/,
-        loader: ['babel-loader'],
+        use: ['babel-loader'],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          'sass-loader',
+        ],
       },
       { 
         test: /\.css$/i, 

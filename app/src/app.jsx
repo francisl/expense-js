@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import store from './stores/store';
 import MainPage from './pages/main';
-import './App.css';
+import './App.scss';
 
 const prodTemplate = <div>
   <Provider store={store}>
