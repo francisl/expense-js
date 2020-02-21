@@ -1,11 +1,14 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import InvoiceForm from '../invoice-form/invoice';
-import { fetchCategories, fetchStores, fetchSpenders } from './actions';
+import InvoiceForm from '../components/invoice-form/InvoiceForm';
+import { fetchCategories, fetchStores, fetchSpenders } from '../components/dashboard/actions';
 import { Layout } from 'antd';
+import './Dashboard.css';
 
-class InvoiceDashboard extends Component {
+const { Content, Sider } = Layout;
+
+class Dashboard extends Component {
   constructor(props, context) {
     super(props, context);
     this.props.actions.fetchCategories();
@@ -15,14 +18,14 @@ class InvoiceDashboard extends Component {
   
   render() {
     return (<Layout>
-      <Layout.Sider>
+      <Sider width="270" theme="light" className="site-layout-background sider">
         <InvoiceForm id="SideLayout"
           stores={this.props.stores}
           categories={this.props.categories}
           spenders={this.props.spenders} 
         />
-      </Layout.Sider>
-      <Layout>Content</Layout>
+      </Sider>
+      <Layout><Content>Content</Content></Layout>
     </Layout>);
   }
 }
@@ -49,4 +52,4 @@ function mapDispatchToProps(dispatch) {
   }};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(InvoiceDashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

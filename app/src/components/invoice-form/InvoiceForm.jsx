@@ -104,10 +104,7 @@ class InvoiceForm extends Component {
 
     return (
       <Layout tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
-        <Layout>
-          {/* <Layout layout="{width: '236px', padding:'2px'}" vertical center> */}
-          
-          <AutoComplete
+         <AutoComplete
             onSelect={this.setStore} 
             dataSource={stores}
             value={form.store}
@@ -141,9 +138,6 @@ class InvoiceForm extends Component {
             onUpdate={this.updateSpenders}/>
           
           <Button onClick={(e) => this.addInvoice(e)} text="Save" />
-          
-        </Layout>
-        {/* </Layout> */}
       </Layout>
     );
   }

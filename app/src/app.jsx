@@ -1,16 +1,20 @@
-import '../styles/main.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import store from './stores/store';
-import MainPage from './pages/main';
-import './App.scss';
+import PageNavigation from './pages/PageNavigation';
+import Header from './components/Header';
 
-const prodTemplate = <div>
+import { Layout } from 'antd';
+import './App.css';
+
+const prodTemplate = 
   <Provider store={store}>
-    <MainPage />
-  </Provider>
-</div>;
+    <Layout className='main-layout'>
+      <Header />  
+      <PageNavigation />
+    </Layout>
+  </Provider>;
 
 const devStyle = {
   marginLeft: '30%'
@@ -18,7 +22,7 @@ const devStyle = {
 
 const devTemplate = <div style={devStyle}>
   <Provider store={store}>
-    <MainPage />
+    <PageNavigation />
   </Provider>
 </div>;
 
