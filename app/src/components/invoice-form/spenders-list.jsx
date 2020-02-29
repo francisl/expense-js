@@ -8,15 +8,16 @@ export default (props) => {
     <Checkbox
       key={s.id}
       onChange={props.onUpdate}
-      label={s.name}
+      
       checked={s.selected}
-      id={s.id}
-    />));
+      id={`${s.id}`}
+    >
+      {s.name}
+    </Checkbox>
+  ));
+  
   return (
-    <Layout tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
-      <Content>
-        {spenders}
-      </Content>
-    </Layout>);
+    <div styles={{ root: { width: '240px' } }}>
+      {spenders}
+    </div>);
 }
-    

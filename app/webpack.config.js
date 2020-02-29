@@ -5,10 +5,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin');
-
 const sourceDir = __dirname + "/src";
 
-module.exports = {
+ const config = {
   cache: true,
   entry: [
     './src/App.jsx'
@@ -51,11 +50,6 @@ module.exports = {
       },
     ]
   },
-  optimization: {
-    usedExports: true,
-    minimize: true,
-    minimizer: [new TerserPlugin()],
-  },
   plugins: [
     new MiniCssExtractPlugin(),
     new webpack.LoaderOptionsPlugin({
@@ -69,3 +63,5 @@ module.exports = {
     })
   ]
 };
+
+module.exports = config

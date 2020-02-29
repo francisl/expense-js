@@ -5,3 +5,12 @@
 .main-layout {
   height: 100%;
 }
+
+.sider-layout {
+  background-color: transparent;
+  height: inherit;
+}
+
+.sider-layout > *:not(:first-child) {
+  margin-top: 10px;
+}

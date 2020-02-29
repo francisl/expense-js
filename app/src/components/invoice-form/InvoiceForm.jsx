@@ -2,16 +2,26 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import {AutoComplete, Button, DatePicker, InputNumber, Layout } from 'antd';
+import dayjs from 'dayjs';
 import moment from 'moment';
 import { addInvoice, REQUEST_STATUS } from './actions';
 import SpendersList from './spenders-list.jsx';
 
-const dateFormat = 'YYYY/MM/DD';
+const dateFormat = 'YYYY-MM-DD';
 
 class InvoiceForm extends Component {
+  state = {
+    form: {
+      category: '',
+      store: '',
+      date: new Date(),
+      amount: '',
+    },
+    submited: false
+  };
+
   constructor(props, context) {
     super(props, context);
-    this.setInitialFormData();
     this.setCategory = this.setField.bind(this, 'category');
     this.setStore = this.setField.bind(this, 'store');
     this.updateSpenders = this.updateSpenders.bind(this);
@@ -43,19 +53,7 @@ class InvoiceForm extends Component {
     this.toggleSelection(e.target.id);
     this.setState({form: {...this.state.form, spenders: this.getSelectedSpenders()}});
   }
-  
-  setInitialFormData() {
-    this.state = {
-      form: {
-        category: '',
-        store: '',
-        date: new Date(),
-        amount: '',
-      },
-      submited: false
-    };
-  }
-  
+
   addInvoice(e) {
     e.preventDefault()
     this.state.form.spenders = this.props.spenders.filter(s => {
@@ -100,44 +98,46 @@ class InvoiceForm extends Component {
       value: `${cat.id}`, text: cat.name
     }));
 
-    console.log('categories : ', categories);
-
     return (
-      <Layout tokens={{ childrenGap: 10 }} styles={{ root: { width: '240px' } }}>
-         <AutoComplete
-            onSelect={this.setStore} 
-            dataSource={stores}
-            value={form.store}
-            placeholder='Store'
-          />
-          
-          <AutoComplete
-            onSelect={this.setCategory} 
-            dataSource={categories}
-            value={form.category}
-            placeholder='Category'
-          />
-          
-          <DatePicker 
-            defaultValue={moment(form.date, dateFormat)} 
-            format={dateFormat} 
-            onChange={this.onDateClicke}
-          />
-          
-          <InputNumber
-            label="Amout"
-            defaultValue="0.00"
-            formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            parser={value => value.replace(/\$\s?|(,*)/g, '')}
-            value={this.state.form.amount} 
-            onChange={this.setAmount}
-          />
-          
-          <SpendersList
-            spenders={this.props.spenders}
-            onUpdate={this.updateSpenders}/>
-          
-          <Button onClick={(e) => this.addInvoice(e)} text="Save" />
+      <Layout 
+        className="sider-layout"
+        styles={{ 
+          width: '240px',
+        }}
+      >
+        <AutoComplete
+          onSelect={this.setStore} 
+          dataSource={stores}
+          value={form.store}
+          placeholder='Store'
+        />
+        
+        <AutoComplete
+          onSelect={this.setCategory} 
+          dataSource={categories}
+          value={form.category}
+          placeholder='Category'
+        />
+        
+        <DatePicker 
+          defaultValue={dayjs(new Date())}
+          onChange={this.onDateClicked}
+        />
+        
+        <InputNumber
+          label="Amout"
+          defaultValue="0.00"
+          formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          parser={value => value.replace(/\$\s?|(,*)/g, '')}
+          value={this.state.form.amount} 
+          onChange={this.setAmount}
+        />
+        
+        <SpendersList
+          spenders={this.props.spenders}
+          onUpdate={this.updateSpenders}/>
+        
+        <Button onClick={(e) => this.addInvoice(e)} value="Save" />
       </Layout>
     );
   }
