@@ -3,11 +3,10 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import {AutoComplete, Button, DatePicker, InputNumber, Layout } from 'antd';
 import dayjs from 'dayjs';
-import moment from 'moment';
 import { addInvoice, REQUEST_STATUS } from './actions';
 import SpendersList from './spenders-list.jsx';
 
-const dateFormat = 'YYYY-MM-DD';
+// const dateFormat = 'YYYY-MM-DD';
 
 class InvoiceForm extends Component {
   state = {
@@ -17,23 +16,15 @@ class InvoiceForm extends Component {
       date: new Date(),
       amount: '',
     },
+    category: {},
+    store: {},
     submited: false
   };
 
   constructor(props, context) {
     super(props, context);
-    this.setCategory = this.setField.bind(this, 'category');
-    this.setStore = this.setField.bind(this, 'store');
     this.updateSpenders = this.updateSpenders.bind(this);
-    this.onDateClicked = this.onDateClicked.bind(this);
     this.toggleSelection = this.toggleSelection.bind(this);
-  }
-  
-  componentWillReceiveProps(nextProps) {
-    // set default to first spenders if no selection
-    if (nextProps.spenders !== this.props.spenders && nextProps.spenders.length > 0) {
-      nextProps.spenders[0].selected = true;
-    }
   }
   
   getSelectedSpenders() {
@@ -64,13 +55,15 @@ class InvoiceForm extends Component {
     this.props.actions.addInvoice(this.state.form);
   }
   
-  onDateClicked(d) {
+  onDateClicked = (d) => {
     this.state.form.date = d //`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
     this.setState(this.state);
   }
   
-  setField(key, e) {
-    this.state.form[key] = e.target.value;
+  setField(key, value, option) {
+    console.log('k : ', key, ' value : ', value, ' option : ', option);
+    this.state[key] = option;
+    this.state.form[key] = option.key;
     this.setState(this.state);
   }
   
@@ -86,17 +79,18 @@ class InvoiceForm extends Component {
       this.setInitialFormData();
     }
   }
+
+  optionsList = (optionsList) => optionsList.map((option) => ({
+    key: `${option.id}`, value:  `${option.id}`, label: option.name
+  }))
   
   render() {
-    const { form } = this.state
+    const { category, store } = this.state
+    const { categories } = this.props
     this.resetFormWhenNeeded();
-    const stores = this.props.stores.map((e) => ({
-      value: `${e.id}_`, text: e.name
-    }));
-
-    const categories = this.props.categories.map((cat) => ({
-      value: `${cat.id}`, text: cat.name
-    }));
+    
+    const stores = this.optionsList(this.props.stores)
+    console.log('stores : ', stores)
 
     return (
       <Layout 
@@ -106,16 +100,20 @@ class InvoiceForm extends Component {
         }}
       >
         <AutoComplete
-          onSelect={this.setStore} 
-          dataSource={stores}
-          value={form.store}
+          onSelect={(value, option) => {
+            this.setField('store', value, option)
+          }}
+          options={stores}
+          value={store.label}
           placeholder='Store'
         />
         
         <AutoComplete
-          onSelect={this.setCategory} 
-          dataSource={categories}
-          value={form.category}
+          options={this.optionsList(categories)}
+          onSelect={(value, option) => {
+            this.setField('category', value, option)
+          }}
+          value={category.label}
           placeholder='Category'
         />
         
