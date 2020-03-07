@@ -38,8 +38,8 @@ export function addInvoice(form) {
     const day = form.date.getDate();
     const formatedDate = form.date.getFullYear() + '-' + month + '-' + day;
 
-    return (dispatch, getState) => {
-        fetch("/api/invoice/", {
+    return async (dispatch, getState) => {
+        const response = await fetch("/api/invoice/", {
             method: "POST",
             headers: new Headers({
                 'Content-Type': 'application/json',
@@ -50,15 +50,13 @@ export function addInvoice(form) {
                 date: formatedDate
             })
         })
-        .then((response) =>{
-            if (response.status >= 400) {
-                dispatch(errorInvoice(status, error));
-                throw new Error('catgories fetch failed, ', r, e);
-            }
-            return response.json();
-        }).then((data) => {
-            dispatch(receiveInvoice(data));
-        })
+        
+        if (response.status >= 400) {
+            dispatch(errorInvoice(status, error));
+            throw new Error('catgories fetch failed, ', r, e);
+        }
+        const data = response.json();
+        dispatch(receiveInvoice(data));
         dispatch(sentInvoice());
     };
 }

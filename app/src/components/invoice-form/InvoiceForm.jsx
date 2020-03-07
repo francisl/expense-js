@@ -26,6 +26,20 @@ class InvoiceForm extends Component {
     this.updateSpenders = this.updateSpenders.bind(this);
     this.toggleSelection = this.toggleSelection.bind(this);
   }
+
+  setInitialState = () => {
+    this.setState ({
+      form: {
+        category: '',
+        store: '',
+        date: new Date(),
+        amount: '',
+      },
+      category: {},
+      store: {},
+      submited: false
+    })
+  }
   
   getSelectedSpenders() {
     return this.props.spenders.filter(s => (s.selected === true));
@@ -76,7 +90,7 @@ class InvoiceForm extends Component {
   
   resetFormWhenNeeded(){
     if (this.state.submited && this.props.form.request.status == REQUEST_STATUS.SUCCESS){
-      this.setInitialFormData();
+      this.setInitialState();
     }
   }
 
@@ -129,13 +143,14 @@ class InvoiceForm extends Component {
           parser={value => value.replace(/\$\s?|(,*)/g, '')}
           value={this.state.form.amount} 
           onChange={this.setAmount}
+          style={{width: '100%'}}
         />
         
         <SpendersList
           spenders={this.props.spenders}
           onUpdate={this.updateSpenders}/>
         
-        <Button onClick={(e) => this.addInvoice(e)} value="Save" />
+        <Button type='primary' onClick={(e) => this.addInvoice(e)}>Save</Button>
       </Layout>
     );
   }
