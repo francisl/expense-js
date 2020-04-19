@@ -77,7 +77,7 @@ class InvoiceForm extends Component {
   setField(key, value, option) {
     console.log('k : ', key, ' value : ', value, ' option : ', option);
     this.state[key] = option;
-    this.state.form[key] = option.key;
+    this.state.form[key] = option.label;
     this.setState(this.state);
   }
   
@@ -115,6 +115,7 @@ class InvoiceForm extends Component {
       >
         <AutoComplete
           onSelect={(value, option) => {
+            debug;
             this.setField('store', value, option)
           }}
           options={stores}

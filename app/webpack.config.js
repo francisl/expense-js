@@ -3,7 +3,6 @@ var path = require('path');
 // var ExtractTextPlugin = require("extract-text-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin');
 const sourceDir = __dirname + "/src";
 
@@ -33,6 +32,9 @@ const sourceDir = __dirname + "/src";
       {
         test: /\.s[ac]ss$/i,
         use: [
+          //'style-loader',
+          // Translates CSS into CommonJS
+          'css-loader',
           'sass-loader',
         ],
       },
