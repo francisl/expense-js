@@ -2,7 +2,7 @@ import { compose, createStore } from 'redux';
 import { applyMiddleware } from 'redux';
 import { combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import { invoiceReducer } from '../components/invoice-form/reducers';
+import { invoiceReducer } from './Invoices/reducers';
 import { categoriesReducers, storesReducers, spendersReducers } from '../components/dashboard/reducers';
 
 const composeStore = compose(

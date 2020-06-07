@@ -18,13 +18,23 @@ const sourceDir = __dirname + "/src";
   },
   devtool: 'source-map',
   resolve: {
-    extensions: ['.webpack.js', '.web.js','.js', '.jsx'],
+    extensions: ['.webpack.js', '.web.js', '.ts', '.tsx','.js', '.jsx'],
     alias: {
       "@ant-design/icons/lib/dist$": path.resolve(__dirname, "./src/icons.js")
     }
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
+        enforce: "pre",
+        test: /\.js$/,
+        loader: "source-map-loader"
+      },
       {	test: /\.jsx?$/,
         exclude: /(node_modules)/,
         use: ['babel-loader'],

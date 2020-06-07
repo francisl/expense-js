@@ -1,9 +1,21 @@
 import React from 'react';
 import { Checkbox, Layout } from 'antd';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 const { Content } = Layout;
 
-export default (props) => {
+type Spender = {
+  id: string;
+  name: string;
+  selected: boolean;
+}
+
+type SpenderListProps = {
+  onUpdate(e: CheckboxChangeEvent): Function;
+  spenders: Spender[];
+}
+
+export default (props: SpenderListProps) => {
   const spenders = props.spenders.map((s) => (
     <Checkbox
       key={s.id}
@@ -17,7 +29,7 @@ export default (props) => {
   ));
   
   return (
-    <div styles={{ root: { width: '240px' } }}>
+    <div style={{ width: '240px' }}>
       {spenders}
     </div>);
 }

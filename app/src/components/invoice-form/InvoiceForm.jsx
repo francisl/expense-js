@@ -3,8 +3,8 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import {AutoComplete, Button, DatePicker, InputNumber, Layout } from 'antd';
 import dayjs from 'dayjs';
-import { addInvoice, REQUEST_STATUS } from './actions';
-import SpendersList from './spenders-list.jsx';
+import { addInvoice, REQUEST_STATUS } from '../../stores/Invoices/actions';
+import SpendersList from './spenders-list';
 
 // const dateFormat = 'YYYY-MM-DD';
 
@@ -61,9 +61,9 @@ class InvoiceForm extends Component {
 
   addInvoice(e) {
     e.preventDefault()
-    this.state.form.spenders = this.props.spenders.filter(s => {
-      return s.selected === true;
-    }).map(s => (s.id));
+    this.state.form.spenders = this.props.spenders
+      .filter(s => s.selected === true)
+      .map(s => s.id);
     
     this.setState({ ...this.state, submited: true });
     this.props.actions.addInvoice(this.state.form);
@@ -95,7 +95,7 @@ class InvoiceForm extends Component {
   }
 
   optionsList = (optionsList) => optionsList.map((option) => ({
-    key: `${option.id}`, value:  `${option.id}`, label: option.name
+    key: `${option.id}`, value: `${option.id}`, label: option.name
   }))
   
   render() {
@@ -115,7 +115,6 @@ class InvoiceForm extends Component {
       >
         <AutoComplete
           onSelect={(value, option) => {
-            debug;
             this.setField('store', value, option)
           }}
           options={stores}

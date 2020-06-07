@@ -5,7 +5,7 @@ import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
-import { REQUEST_STATUS } from './actions';
+import { REQUEST_STATUS } from '../../stores/Invoices/actions';
 
 const variantIcon = {
   success: CheckCircleIcon,
