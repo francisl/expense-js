@@ -7,3 +7,6 @@ dist/
 semantic/
 *.sqlite
 .idea/
+.metals/
+.vscode/
+

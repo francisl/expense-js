@@ -38,15 +38,16 @@ class Config {
 		return this.userConfigData.dbPath;
 	}
 
-	getDBFilePath() {
-		return this.configData.db.filename === ':memory:' ? ':memory:' : this.getDbFile();
-	}
-
-	getDbFile() {
+	getDbFullFilePath() {
 		const dbPath = path.join(this.getDbPath(), this.configData.db.filename);
 		console.log('DB Path : ', dbPath);
 		return dbPath;
 	}
+	
+	getDBFilePath() {
+		return this.configData.db.filename === ':memory:' ? ':memory:' : this.getDbFullFilePath();
+	}
+
 }
 
 module.exports = new Config();
