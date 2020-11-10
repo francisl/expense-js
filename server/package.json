@@ -24,16 +24,16 @@
     "sqlite3": "^5.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.11.4",
-    "@babel/preset-env": "^7.11.0",
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
     "better-console": "^1.0.1",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "cross-env": "^7.0.2",
     "express": "^4.17.1",
-    "mocha": "^8.1.1",
-    "sinon": "^9.0.3"
+    "mocha": "^8.2.1",
+    "sinon": "^9.2.1"
   }
 }
