@@ -10,3 +10,6 @@ semantic/
 .metals/
 .vscode/
 
+
+.fake
+.ionide
