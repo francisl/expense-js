@@ -20,7 +20,7 @@
     "jquery": "^3.5.1",
     "lodash": "^4.17.20",
     "map-stream": "0.0.7",
-    "pug": "^3.0.0",
+    "pug": "^3.0.1",
     "require-dot-file": "^0.4.0",
     "sqlite3": "^5.0.0"
   },
