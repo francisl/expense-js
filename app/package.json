@@ -24,7 +24,7 @@
     "antd": "^4.8.2",
     "dayjs": "^1.9.5",
     "isomorphic-fetch": "^2.2.1",
-    "moment": "^2.27.0",
+    "moment": "^2.29.4",
     "react": "^16.13.1",
     "react-day-picker": "^7.4.8",
     "react-dom": "^16.13.1",
